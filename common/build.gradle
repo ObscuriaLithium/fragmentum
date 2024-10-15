@@ -1,0 +1,42 @@
+plugins {
+    id 'mod-common'
+    id 'net.neoforged.moddev'
+}
+
+neoForge {
+    neoFormVersion = neo_form_version
+
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.add(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+}
+
+apply from: 'dependencies.gradle'
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}
+
+tasks.register('buildApi', Jar) {
+    from sourceSets.main.output
+    include 'dev/obscuria/fragmentum/api/**'
+    archiveFileName = "fragmentum-api-${minecraft_version}-${version}.jar"
+}
+
