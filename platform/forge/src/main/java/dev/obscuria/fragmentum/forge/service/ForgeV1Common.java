@@ -1,4 +1,4 @@
-package dev.obscuria.fragmentum.fabric.service;
+package dev.obscuria.fragmentum.forge.service;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -7,7 +7,10 @@ import dev.obscuria.fragmentum.api.v1.common.IPayloadRegistrar;
 import dev.obscuria.fragmentum.api.v1.common.V1Common;
 import dev.obscuria.fragmentum.api.v1.common.easing.CubicCurve;
 import dev.obscuria.fragmentum.api.v1.common.event.Event;
-import dev.obscuria.fragmentum.api.v1.common.signal.*;
+import dev.obscuria.fragmentum.api.v1.common.signal.Signal0;
+import dev.obscuria.fragmentum.api.v1.common.signal.Signal1;
+import dev.obscuria.fragmentum.api.v1.common.signal.Signal2;
+import dev.obscuria.fragmentum.api.v1.common.signal.Signal3;
 import dev.obscuria.fragmentum.api.v1.common.text.TextWrapper;
 import dev.obscuria.fragmentum.core.v1.common.easing.CubicCurveImpl;
 import dev.obscuria.fragmentum.core.v1.common.event.EventImpl;
@@ -16,13 +19,9 @@ import dev.obscuria.fragmentum.core.v1.common.signal.Signal1Impl;
 import dev.obscuria.fragmentum.core.v1.common.signal.Signal2Impl;
 import dev.obscuria.fragmentum.core.v1.common.signal.Signal3Impl;
 import dev.obscuria.fragmentum.core.v1.common.text.TextWrapperImpl;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
+import dev.obscuria.fragmentum.forge.ForgeFragmentum;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -39,22 +38,30 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.DataPackRegistryEvent;
+import net.minecraftforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public final class FabricV1Common implements V1Common
+public final class ForgeV1Common implements V1Common
 {
-    static @Nullable PacketSender replyPacketSender;
+    static @Nullable CustomPayloadEvent.Context replyContext;
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T, V extends T> Deferred<T, V> register(String modId,
                                                     Registry<T> registry,
                                                     ResourceKey<T> key,
                                                     Supplier<V> valueSupplier)
     {
-        return Deferred.of(Registry.registerForHolder(registry, key, valueSupplier.get()));
+        final var deferredRegister = DeferredRegister.create(registry.key(), modId);
+        deferredRegister.register(ForgeFragmentum.eventBus(modId));
+        final var object = deferredRegister.register(key.location().getPath(), valueSupplier);
+        return Deferred.of(() -> (Holder<T>) object.getHolder().orElseThrow());
     }
 
     @Override
@@ -62,7 +69,8 @@ public final class FabricV1Common implements V1Common
                                     ResourceKey<Registry<T>> key,
                                     Codec<T> codec)
     {
-        DynamicRegistries.register(key, codec);
+        ForgeFragmentum.eventBus(modId).addListener((DataPackRegistryEvent.NewRegistry event) ->
+                event.dataPackRegistry(key, codec));
     }
 
     @Override
@@ -70,7 +78,8 @@ public final class FabricV1Common implements V1Common
                                           ResourceKey<Registry<T>> key,
                                           Codec<T> codec)
     {
-        DynamicRegistries.registerSynced(key, codec);
+        ForgeFragmentum.eventBus(modId).addListener((DataPackRegistryEvent.NewRegistry event) ->
+                event.dataPackRegistry(key, codec, codec));
     }
 
     @Override
@@ -79,59 +88,62 @@ public final class FabricV1Common implements V1Common
                                           Codec<T> dataCodec,
                                           Codec<T> networkCodec)
     {
-        DynamicRegistries.registerSynced(key, dataCodec, networkCodec);
+        ForgeFragmentum.eventBus(modId).addListener((DataPackRegistryEvent.NewRegistry event) ->
+                event.dataPackRegistry(key, dataCodec, networkCodec));
     }
 
     @Override
     public IPayloadRegistrar payloadRegister(String modId)
     {
-        return new FabricPayloadRegistrar(modId);
+        return new ForgePayloadRegistrar(modId);
     }
 
     @Override
     public <T extends CustomPacketPayload> void reply(T payload)
     {
-        if (replyPacketSender == null)
+        if (replyContext == null)
             throw new IllegalStateException("No context to reply to");
-        replyPacketSender.sendPacket(payload);
+        ForgePayloadRegistrar.getOrThrow(payload).reply(payload, replyContext);
     }
 
     @Override
     public <T extends CustomPacketPayload> void sendTo(ServerPlayer player,
                                                        T payload)
     {
-        ServerPlayNetworking.send(player, payload);
+        ForgePayloadRegistrar.getOrThrow(payload).send(payload,
+                PacketDistributor.PLAYER.with(player));
     }
 
     @Override
-    public <T extends CustomPacketPayload> void sendToTracking(ServerLevel world,
+    public <T extends CustomPacketPayload> void sendToTracking(ServerLevel level,
                                                                BlockPos pos,
                                                                T payload)
     {
-        for (ServerPlayer player : PlayerLookup.tracking(world, pos))
-            ServerPlayNetworking.send(player, payload);
+        ForgePayloadRegistrar.getOrThrow(payload).send(payload,
+                PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(pos)));
     }
 
     @Override
     public <T extends CustomPacketPayload> void sendToTracking(Entity entity,
                                                                T payload)
     {
-        for (ServerPlayer player : PlayerLookup.tracking(entity))
-            ServerPlayNetworking.send(player, payload);
+        ForgePayloadRegistrar.getOrThrow(payload).send(payload,
+                PacketDistributor.TRACKING_ENTITY.with(entity));
     }
 
     @Override
     public <T extends CustomPacketPayload> void sendToAll(MinecraftServer server,
                                                           T payload)
     {
-        for (ServerPlayer player : PlayerLookup.all(server))
-            ServerPlayNetworking.send(player, payload);
+        ForgePayloadRegistrar.getOrThrow(payload).send(payload,
+                PacketDistributor.ALL.noArg());
     }
 
     @Override
     public <T extends CustomPacketPayload> void sendToServer(T payload)
     {
-        ClientPlayNetworking.send(payload);
+        ForgePayloadRegistrar.getOrThrow(payload).send(payload,
+                PacketDistributor.SERVER.noArg());
     }
 
     @Override
@@ -148,7 +160,20 @@ public final class FabricV1Common implements V1Common
                        MapCodec<T> codec,
                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec)
     {
-        return FabricParticleTypes.complex(alwaysSpawn, codec, streamCodec);
+        return new ParticleType<>(alwaysSpawn)
+        {
+            @Override
+            public MapCodec<T> codec()
+            {
+                return codec;
+            }
+
+            @Override
+            public StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec()
+            {
+                return streamCodec;
+            }
+        };
     }
 
     @Override

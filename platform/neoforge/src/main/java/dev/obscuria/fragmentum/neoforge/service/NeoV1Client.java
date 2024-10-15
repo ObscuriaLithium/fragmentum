@@ -3,7 +3,7 @@ package dev.obscuria.fragmentum.neoforge.service;
 import dev.obscuria.fragmentum.api.Deferred;
 import dev.obscuria.fragmentum.api.v1.client.ObscureClientRegistry;
 import dev.obscuria.fragmentum.api.v1.client.V1Client;
-import dev.obscuria.fragmentum.neoforge.NeoObscureAPI;
+import dev.obscuria.fragmentum.neoforge.NeoFragmentum;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.particle.ParticleProvider;
@@ -34,7 +34,7 @@ public final class NeoV1Client implements V1Client
                            Deferred<EntityType<?>, EntityType<E>> type,
                            EntityRendererProvider<E> provider)
     {
-        NeoObscureAPI.eventBus(modId).addListener((EntityRenderersEvent.RegisterRenderers event) ->
+        NeoFragmentum.eventBus(modId).addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerEntityRenderer(type.value(), provider));
     }
 
@@ -44,7 +44,7 @@ public final class NeoV1Client implements V1Client
                                 Deferred<BlockEntityType<?>, BlockEntityType<T>> type,
                                 BlockEntityRendererProvider<T> provider)
     {
-        NeoObscureAPI.eventBus(modId).addListener((EntityRenderersEvent.RegisterRenderers event) ->
+        NeoFragmentum.eventBus(modId).addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerBlockEntityRenderer(type.value(), provider));
     }
 
@@ -54,7 +54,7 @@ public final class NeoV1Client implements V1Client
                              Deferred<ParticleType<?>, ParticleType<T>> type,
                              ParticleProvider<T> provider)
     {
-        NeoObscureAPI.eventBus(modId).addListener((RegisterParticleProvidersEvent event) ->
+        NeoFragmentum.eventBus(modId).addListener((RegisterParticleProvidersEvent event) ->
                 event.registerSpecial(type.value(), provider));
     }
 
@@ -64,7 +64,7 @@ public final class NeoV1Client implements V1Client
                                      Deferred<ParticleType<?>, ParticleType<T>> type,
                                      ObscureClientRegistry.TexturedParticleProvider<T> provider)
     {
-        NeoObscureAPI.eventBus(modId).addListener((RegisterParticleProvidersEvent event) ->
+        NeoFragmentum.eventBus(modId).addListener((RegisterParticleProvidersEvent event) ->
                 event.registerSpriteSet(type.value(), provider::create));
     }
 
@@ -73,7 +73,7 @@ public final class NeoV1Client implements V1Client
                                    ModelLayerLocation layerLocation,
                                    ObscureClientRegistry.ModelLayerProvider provider)
     {
-        NeoObscureAPI.eventBus(modId).addListener((EntityRenderersEvent.RegisterLayerDefinitions event) ->
+        NeoFragmentum.eventBus(modId).addListener((EntityRenderersEvent.RegisterLayerDefinitions event) ->
                 event.registerLayerDefinition(layerLocation, provider::create));
     }
 
@@ -83,7 +83,7 @@ public final class NeoV1Client implements V1Client
                                         ObscureClientRegistry.ItemColorProvider provider,
                                         Deferred<Item, ? extends Item>... items)
     {
-        NeoObscureAPI.eventBus(modId).addListener((RegisterColorHandlersEvent.Item event) ->
+        NeoFragmentum.eventBus(modId).addListener((RegisterColorHandlersEvent.Item event) ->
                 event.register(provider::getColor, Arrays.stream(items).map(Deferred::value).toArray(Item[]::new)));
     }
 
@@ -99,7 +99,7 @@ public final class NeoV1Client implements V1Client
     public void registerKeyMapping(String modId,
                                    KeyMapping keyMapping)
     {
-        NeoObscureAPI.eventBus(modId).addListener((RegisterKeyMappingsEvent event) ->
+        NeoFragmentum.eventBus(modId).addListener((RegisterKeyMappingsEvent event) ->
                 event.register(keyMapping));
     }
 }

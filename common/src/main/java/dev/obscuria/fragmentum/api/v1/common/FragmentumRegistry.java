@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
-public interface ObscureRegistry
+public interface FragmentumRegistry
 {
     static <T, V extends T> Deferred<T, V> register(String modId,
                                                     Registry<T> registry,

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.BiFunction;
 
-public interface ObscureFactory
+public interface FragmentumFactory
 {
     static <T extends BlockEntity> BlockEntityType.Builder<T>
     createBlockEntityType(BiFunction<BlockPos, BlockState, T> factory,

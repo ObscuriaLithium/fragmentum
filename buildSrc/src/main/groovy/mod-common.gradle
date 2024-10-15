@@ -14,8 +14,13 @@ java {
 }
 
 repositories {
+    maven {
+        url "https://libraries.minecraft.net"
+        content {
+            includeModule("org.lwjgl", "lwjgl-freetype")
+        }
+    }
     mavenCentral()
-
     exclusiveContent {
         forRepository {
             maven {

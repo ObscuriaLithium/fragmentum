@@ -46,5 +46,5 @@ plugins {
 rootProject.name = 'Fragmentum'
 include('common')
 include('platform:fabric')
-//include('platform:neoforge')
-//include('platform:forge')
+include('platform:neoforge')
+include('platform:forge')

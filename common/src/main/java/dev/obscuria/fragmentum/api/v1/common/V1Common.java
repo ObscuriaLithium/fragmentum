@@ -23,7 +23,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -31,7 +30,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ServiceLoader;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -63,19 +61,7 @@ public interface V1Common
 
     // NETWORKING
 
-    <T extends CustomPacketPayload> void
-    registerClientbound(String modId,
-                        Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<Player, T> handler);
-
-    <T extends CustomPacketPayload> void
-    registerServerbound(String modId,
-                        Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<ServerPlayer, T> handler);
+    IPayloadRegistrar payloadRegister(String modId);
 
     <T extends CustomPacketPayload> void reply(T payload);
 
