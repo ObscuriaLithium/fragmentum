@@ -10,7 +10,7 @@ public final class ForgePlatform implements IPlatform
     @Override
     public String getPlatformName()
     {
-        return "NeoForge";
+        return "Forge";
     }
 
     @Override

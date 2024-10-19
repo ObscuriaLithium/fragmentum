@@ -1,8 +1,8 @@
 package dev.obscuria.fragmentum.core.v1.common.easing;
 
+import com.google.common.collect.Lists;
 import dev.obscuria.fragmentum.api.v1.common.easing.CubicCurve;
 import dev.obscuria.fragmentum.api.v1.common.easing.EasingFunction;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.Comparator;
 import java.util.List;

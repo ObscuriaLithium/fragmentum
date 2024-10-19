@@ -9,5 +9,5 @@ public interface V1Server
 {
     V1Server INSTANCE = ServiceLoader.load(V1Server.class).findFirst().orElseThrow();
 
-    void registerCommand(ObscureServerRegistry.CommandRegistrar registrar);
+    void registerCommand(FragmentumServerRegistry.CommandRegistrar registrar);
 }

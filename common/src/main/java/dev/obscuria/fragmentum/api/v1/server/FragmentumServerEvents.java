@@ -5,7 +5,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 
-public interface ObscureServerEvents
+public interface FragmentumServerEvents
 {
     Event<Start> SERVER_STARTING = Event.create();
     Event<Start> SERVER_STARTED = Event.create();

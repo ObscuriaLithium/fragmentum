@@ -1,9 +1,9 @@
 package dev.obscuria.fragmentum.core.v1.common.signal;
 
+import com.google.common.collect.Lists;
 import dev.obscuria.fragmentum.api.v1.common.signal.Signal;
 import dev.obscuria.fragmentum.api.v1.common.signal.Signal0;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.List;

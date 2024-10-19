@@ -1,9 +1,9 @@
 package dev.obscuria.fragmentum.core.v1.common.event;
 
+import com.google.common.collect.Lists;
 import dev.obscuria.fragmentum.api.v1.common.event.Event;
 import dev.obscuria.fragmentum.api.v1.common.event.EventHandler;
 import dev.obscuria.fragmentum.api.v1.common.event.EventToken;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.UUID;

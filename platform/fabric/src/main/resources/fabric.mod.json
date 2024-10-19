@@ -32,8 +32,10 @@
         "minecraft": "${minecraft_version}",
         "java": ">=${java_version}"
     },
-    "suggests": {
-        "another-mod": "*"
+    "custom": {
+        "modmenu": {
+            "badges": [ "library" ]
+        }
     }
 }
   

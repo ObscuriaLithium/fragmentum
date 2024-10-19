@@ -3,8 +3,6 @@ plugins {
     id 'fabric-loom'
 }
 
-apply from: 'dependencies.gradle'
-
 loom {
     def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
@@ -28,3 +26,5 @@ loom {
         }
     }
 }
+
+apply from: 'dependencies.gradle'

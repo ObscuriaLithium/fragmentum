@@ -6,7 +6,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
 @SuppressWarnings("unused")
-public interface ObscureServerRegistry
+public interface FragmentumServerRegistry
 {
     static void registerCommand(CommandRegistrar registrar)
     {

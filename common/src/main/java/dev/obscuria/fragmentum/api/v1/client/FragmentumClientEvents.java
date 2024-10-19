@@ -4,7 +4,7 @@ import dev.obscuria.fragmentum.api.v1.common.event.Event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 
-public interface ObscureClientEvents
+public interface FragmentumClientEvents
 {
     Event<WorldRender> START_RENDER = Event.create();
     Event<WorldRender> END_RENDER = Event.create();

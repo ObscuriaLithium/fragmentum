@@ -1,34 +1,34 @@
 package dev.obscuria.fragmentum.api;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.core.Holder;
+import org.apache.logging.log4j.util.Lazy;
 
 import java.util.function.Supplier;
 
 public final class Deferred<T, V extends T>
 {
-    private final Supplier<Holder<T>> cachedHolder;
+    private final Lazy<Holder<T>> lazyHolder;
 
     public static <T, V extends T> Deferred<T, V>
     of(Supplier<Holder<T>> holderSupplier)
     {
-        return new Deferred<>(holderSupplier);
+        return new Deferred<>(Lazy.lazy(holderSupplier));
     }
 
     public static <T, V extends T> Deferred<T, V>
     of(Holder<T> holder)
     {
-        return new Deferred<>(() -> holder);
+        return new Deferred<>(Lazy.value(holder));
     }
 
-    private Deferred(Supplier<Holder<T>> holderSupplier)
+    private Deferred(Lazy<Holder<T>> lazyHolder)
     {
-        this.cachedHolder = Suppliers.memoize(holderSupplier::get);
+        this.lazyHolder = lazyHolder;
     }
 
     public Holder<T> holder()
     {
-        return this.cachedHolder.get();
+        return this.lazyHolder.get();
     }
 
     @SuppressWarnings("unchecked")

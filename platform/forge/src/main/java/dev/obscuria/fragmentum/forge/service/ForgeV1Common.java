@@ -1,9 +1,8 @@
 package dev.obscuria.fragmentum.forge.service;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import dev.obscuria.fragmentum.api.Deferred;
 import dev.obscuria.fragmentum.api.v1.common.IPayloadRegistrar;
+import dev.obscuria.fragmentum.api.v1.common.IRegistrar;
 import dev.obscuria.fragmentum.api.v1.common.V1Common;
 import dev.obscuria.fragmentum.api.v1.common.easing.CubicCurve;
 import dev.obscuria.fragmentum.api.v1.common.event.Event;
@@ -19,17 +18,13 @@ import dev.obscuria.fragmentum.core.v1.common.signal.Signal1Impl;
 import dev.obscuria.fragmentum.core.v1.common.signal.Signal2Impl;
 import dev.obscuria.fragmentum.core.v1.common.signal.Signal3Impl;
 import dev.obscuria.fragmentum.core.v1.common.text.TextWrapperImpl;
-import dev.obscuria.fragmentum.forge.ForgeFragmentum;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,56 +35,18 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.DataPackRegistryEvent;
-import net.minecraftforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 public final class ForgeV1Common implements V1Common
 {
     static @Nullable CustomPayloadEvent.Context replyContext;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T, V extends T> Deferred<T, V> register(String modId,
-                                                    Registry<T> registry,
-                                                    ResourceKey<T> key,
-                                                    Supplier<V> valueSupplier)
+    public IRegistrar registrar(String modId)
     {
-        final var deferredRegister = DeferredRegister.create(registry.key(), modId);
-        deferredRegister.register(ForgeFragmentum.eventBus(modId));
-        final var object = deferredRegister.register(key.location().getPath(), valueSupplier);
-        return Deferred.of(() -> (Holder<T>) object.getHolder().orElseThrow());
-    }
-
-    @Override
-    public <T> void newDataRegistry(String modId,
-                                    ResourceKey<Registry<T>> key,
-                                    Codec<T> codec)
-    {
-        ForgeFragmentum.eventBus(modId).addListener((DataPackRegistryEvent.NewRegistry event) ->
-                event.dataPackRegistry(key, codec));
-    }
-
-    @Override
-    public <T> void newSyncedDataRegistry(String modId,
-                                          ResourceKey<Registry<T>> key,
-                                          Codec<T> codec)
-    {
-        ForgeFragmentum.eventBus(modId).addListener((DataPackRegistryEvent.NewRegistry event) ->
-                event.dataPackRegistry(key, codec, codec));
-    }
-
-    @Override
-    public <T> void newSyncedDataRegistry(String modId,
-                                          ResourceKey<Registry<T>> key,
-                                          Codec<T> dataCodec,
-                                          Codec<T> networkCodec)
-    {
-        ForgeFragmentum.eventBus(modId).addListener((DataPackRegistryEvent.NewRegistry event) ->
-                event.dataPackRegistry(key, dataCodec, networkCodec));
+        return new ForgeRegistrar(modId);
     }
 
     @Override

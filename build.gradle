@@ -2,3 +2,22 @@ plugins {
     id 'fabric-loom' version '1.7-SNAPSHOT' apply false
     id 'net.neoforged.moddev' version '0.1.110' apply false
 }
+
+tasks.register('buildAll') {
+    dependsOn ':common:buildApi',
+              ':platform:fabric:build',
+              ':platform:neoforge:build',
+              ':platform:forge:jarJar'
+    doLast {
+        def output = project.file("output/${version}")
+        output.mkdirs()
+        copy { from file("common/build/libs/${mod_id}-api-${minecraft_version}-${version}.jar") into output }
+        copy { from file("platform/fabric/build/libs/${mod_id}-fabric-${minecraft_version}-${version}.jar") into output }
+        copy { from file("platform/neoforge/build/libs/${mod_id}-neoforge-${minecraft_version}-${version}.jar") into output }
+        copy {
+            from file("platform/forge/build/libs/${mod_id}-forge-${minecraft_version}-${version}-all.jar")
+            rename { it.replace('-all', '') }
+            into output
+        }
+    }
+}

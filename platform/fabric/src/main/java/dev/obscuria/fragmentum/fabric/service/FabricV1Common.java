@@ -1,9 +1,8 @@
 package dev.obscuria.fragmentum.fabric.service;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import dev.obscuria.fragmentum.api.Deferred;
 import dev.obscuria.fragmentum.api.v1.common.IPayloadRegistrar;
+import dev.obscuria.fragmentum.api.v1.common.IRegistrar;
 import dev.obscuria.fragmentum.api.v1.common.V1Common;
 import dev.obscuria.fragmentum.api.v1.common.easing.CubicCurve;
 import dev.obscuria.fragmentum.api.v1.common.event.Event;
@@ -17,20 +16,17 @@ import dev.obscuria.fragmentum.core.v1.common.signal.Signal2Impl;
 import dev.obscuria.fragmentum.core.v1.common.signal.Signal3Impl;
 import dev.obscuria.fragmentum.core.v1.common.text.TextWrapperImpl;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,44 +38,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 public final class FabricV1Common implements V1Common
 {
     static @Nullable PacketSender replyPacketSender;
 
     @Override
-    public <T, V extends T> Deferred<T, V> register(String modId,
-                                                    Registry<T> registry,
-                                                    ResourceKey<T> key,
-                                                    Supplier<V> valueSupplier)
+    public IRegistrar registrar(String modId)
     {
-        return Deferred.of(Registry.registerForHolder(registry, key, valueSupplier.get()));
-    }
-
-    @Override
-    public <T> void newDataRegistry(String modId,
-                                    ResourceKey<Registry<T>> key,
-                                    Codec<T> codec)
-    {
-        DynamicRegistries.register(key, codec);
-    }
-
-    @Override
-    public <T> void newSyncedDataRegistry(String modId,
-                                          ResourceKey<Registry<T>> key,
-                                          Codec<T> codec)
-    {
-        DynamicRegistries.registerSynced(key, codec);
-    }
-
-    @Override
-    public <T> void newSyncedDataRegistry(String modId,
-                                          ResourceKey<Registry<T>> key,
-                                          Codec<T> dataCodec,
-                                          Codec<T> networkCodec)
-    {
-        DynamicRegistries.registerSynced(key, dataCodec, networkCodec);
+        return new FabricRegistrar(modId);
     }
 
     @Override

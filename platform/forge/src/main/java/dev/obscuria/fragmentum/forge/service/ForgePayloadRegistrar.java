@@ -52,7 +52,7 @@ public record ForgePayloadRegistrar(String modId) implements IPayloadRegistrar
                             ForgeV1Common.replyContext = context;
                             handler.accept(Minecraft.getInstance().player, payload);
                             ForgeV1Common.replyContext = null;
-                        }));
+                        })).add();
     }
 
     @Override
@@ -70,7 +70,7 @@ public record ForgePayloadRegistrar(String modId) implements IPayloadRegistrar
                             ForgeV1Common.replyContext = context;
                             handler.accept(context.getSender(), payload);
                             ForgeV1Common.replyContext = null;
-                        }));
+                        })).add();
     }
 
     public static SimpleChannel get(String modId)
