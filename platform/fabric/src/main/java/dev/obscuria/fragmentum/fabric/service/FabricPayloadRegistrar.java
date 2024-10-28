@@ -1,5 +1,6 @@
 package dev.obscuria.fragmentum.fabric.service;
 
+import dev.obscuria.fragmentum.api.Fragmentum;
 import dev.obscuria.fragmentum.api.v1.common.IPayloadRegistrar;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -28,6 +29,7 @@ public record FabricPayloadRegistrar(String modId) implements IPayloadRegistrar
                         BiConsumer<Player, T> handler)
     {
         PayloadTypeRegistry.playS2C().register(type, streamCodec);
+        if (Fragmentum.PLATFORM.isDedicatedServer()) return;
         ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
             final var client = context.client();
             if (client == null) return;

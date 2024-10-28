@@ -35,6 +35,7 @@ artifacts {
 }
 
 tasks.register('buildApi', Jar) {
+    group = 'build'
     from sourceSets.main.output
     include 'dev/obscuria/fragmentum/api/**'
     archiveFileName = "fragmentum-api-${minecraft_version}-${version}.jar"

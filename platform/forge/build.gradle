@@ -1,7 +1,10 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'mod-platform'
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 mixin {
@@ -73,4 +76,39 @@ sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
+}
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    dependsOn ':buildAll'
+    group = 'publishing'
+    apiToken = System.getenv('curseforge_token')
+
+    def filePath = "output/${version}/${mod_id}-forge-${minecraft_version}-${version}.jar"
+    def file = upload(curseforge_forge_id, rootProject.file(filePath))
+    file.displayName = "${mod_name} ${version}"
+    file.releaseType = publish_release_type
+    file.changelog = rootProject.file('CHANGELOG.md').text
+    file.changelogType = 'markdown'
+    file.addGameVersion(minecraft_version)
+    file.addModLoader("forge")
+}
+
+modrinth {
+    token = System.getenv("modrinth_token")
+
+    def filePath = "output/${version}/${mod_id}-forge-${minecraft_version}-${version}.jar"
+    uploadFile = rootProject.file(filePath)
+    projectId = "fragmentum"
+    versionName = "${mod_name} ${version}"
+    versionNumber = "${version}"
+    versionType = publish_release_type
+    changelog = rootProject.file('CHANGELOG.md').text
+    gameVersions = [ minecraft_version ]
+    loaders = ["forge"]
+}
+
+tasks.register('publishModrinth') {
+    dependsOn ':buildAll'
+    dependsOn 'modrinth'
+    group = 'publishing'
 }

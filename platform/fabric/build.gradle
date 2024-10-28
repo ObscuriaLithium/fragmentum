@@ -1,6 +1,9 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'mod-platform'
     id 'fabric-loom'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 loom {
@@ -28,3 +31,44 @@ loom {
 }
 
 apply from: 'dependencies.gradle'
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    dependsOn ':buildAll'
+    group = 'publishing'
+    apiToken = System.getenv('curseforge_token')
+
+    def filePath = "output/${version}/${mod_id}-fabric-${minecraft_version}-${version}.jar"
+    def file = upload(curseforge_fabric_id, rootProject.file(filePath))
+    file.displayName = "${mod_name} ${version}"
+    file.releaseType = publish_release_type
+    file.changelog = rootProject.file('CHANGELOG.md').text
+    file.changelogType = 'markdown'
+    file.addGameVersion(minecraft_version)
+    file.addModLoader("fabric", "quilt")
+    file.addRequirement("fabric-api")
+    file.addOptional("modmenu")
+}
+
+modrinth {
+    token = System.getenv("modrinth_token")
+
+    def filePath = "output/${version}/${mod_id}-fabric-${minecraft_version}-${version}.jar"
+    uploadFile = rootProject.file(filePath)
+    projectId = "fragmentum"
+    versionName = "${mod_name} ${version}"
+    versionNumber = "${version}"
+    versionType = publish_release_type
+    changelog = rootProject.file('CHANGELOG.md').text
+    gameVersions = [ minecraft_version ]
+    loaders = ["fabric", "quilt"]
+    dependencies {
+        required.project "fabric-api"
+        optional.project "modmenu"
+    }
+}
+
+tasks.register('publishModrinth') {
+    dependsOn ':buildAll'
+    dependsOn 'modrinth'
+    group = 'publishing'
+}

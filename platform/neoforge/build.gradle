@@ -1,6 +1,9 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'mod-platform'
     id 'net.neoforged.moddev'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 neoForge {
@@ -38,3 +41,38 @@ neoForge {
 apply from: 'dependencies.gradle'
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    dependsOn ':buildAll'
+    group = 'publishing'
+    apiToken = System.getenv('curseforge_token')
+
+    def filePath = "output/${version}/${mod_id}-neoforge-${minecraft_version}-${version}.jar"
+    def file = upload(curseforge_neoforge_id, rootProject.file(filePath))
+    file.displayName = "${mod_name} ${version}"
+    file.releaseType = publish_release_type
+    file.changelog = rootProject.file('CHANGELOG.md').text
+    file.changelogType = 'markdown'
+    file.addGameVersion(minecraft_version)
+    file.addModLoader("neoforge")
+}
+
+modrinth {
+    token = System.getenv("modrinth_token")
+
+    def filePath = "output/${version}/${mod_id}-neoforge-${minecraft_version}-${version}.jar"
+    uploadFile = rootProject.file(filePath)
+    projectId = "fragmentum"
+    versionName = "${mod_name} ${version}"
+    versionNumber = "${version}"
+    versionType = publish_release_type
+    changelog = rootProject.file('CHANGELOG.md').text
+    gameVersions = [ minecraft_version ]
+    loaders = ["neoforge"]
+}
+
+tasks.register('publishModrinth') {
+    dependsOn ':buildAll'
+    dependsOn 'modrinth'
+    group = 'publishing'
+}

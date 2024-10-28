@@ -1,0 +1,2 @@
+- **Fabric Networking**: Client-side payload receiver is no longer registered on the server side.
+- **Project**: Added automatic publishing.
