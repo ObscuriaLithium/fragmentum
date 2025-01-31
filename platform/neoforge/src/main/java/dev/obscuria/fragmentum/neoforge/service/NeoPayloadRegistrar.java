@@ -12,6 +12,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
+@SuppressWarnings("unused")
 public record NeoPayloadRegistrar(String modId, AtomicBoolean optional) implements IPayloadRegistrar
 {
     @Override
@@ -27,11 +28,11 @@ public record NeoPayloadRegistrar(String modId, AtomicBoolean optional) implemen
     }
 
     @Override
-    public <T extends CustomPacketPayload> void
-    registerClientbound(Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<Player, T> handler)
+    public <T extends CustomPacketPayload> void registerClientbound(
+            Class<T> clazz,
+            CustomPacketPayload.Type<T> type,
+            StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
+            BiConsumer<Player, T> handler)
     {
         NeoFragmentum.eventBus(modId).addListener((RegisterPayloadHandlersEvent event) ->
         {
@@ -48,11 +49,11 @@ public record NeoPayloadRegistrar(String modId, AtomicBoolean optional) implemen
     }
 
     @Override
-    public <T extends CustomPacketPayload> void
-    registerServerbound(Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<ServerPlayer, T> handler)
+    public <T extends CustomPacketPayload> void registerServerbound(
+            Class<T> clazz,
+            CustomPacketPayload.Type<T> type,
+            StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
+            BiConsumer<ServerPlayer, T> handler)
     {
         NeoFragmentum.eventBus(modId).addListener((RegisterPayloadHandlersEvent event) ->
         {

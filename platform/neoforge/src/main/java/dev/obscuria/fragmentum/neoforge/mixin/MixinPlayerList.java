@@ -14,22 +14,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinPlayerList
 {
     @Inject(method = "placeNewPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundUpdateRecipesPacket;<init>(Ljava/util/Collection;)V"))
-    private void placeNewPlayer_SyncDataPackContents(Connection connection,
-                                                     ServerPlayer player,
-                                                     CommonListenerCookie cookie,
-                                                     CallbackInfo info)
+    private void placeNewPlayer_listener(
+            Connection connection,
+            ServerPlayer player,
+            CommonListenerCookie cookie,
+            CallbackInfo info)
     {
-        FragmentumServerEvents.SYNC_DATA_PACK_CONTENTS.broadcast(listener ->
-                listener.invoke(player, true));
+        FragmentumServerEvents.SYNC_DATA_PACK_CONTENTS.broadcast(listener -> listener.invoke(player, true));
     }
 
     @Inject(method = "reloadResources", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/common/ClientboundUpdateTagsPacket;<init>(Ljava/util/Map;)V"))
-    private void reloadResources_SyncDataPackContents(CallbackInfo info)
+    private void reloadResources_listener(CallbackInfo info)
     {
         for (var player : ((PlayerList) (Object) this).getPlayers())
         {
-            FragmentumServerEvents.SYNC_DATA_PACK_CONTENTS.broadcast(listener ->
-                    listener.invoke(player, false));
+            FragmentumServerEvents.SYNC_DATA_PACK_CONTENTS.broadcast(listener -> listener.invoke(player, false));
         }
     }
 }

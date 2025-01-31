@@ -11,6 +11,7 @@ import dev.obscuria.fragmentum.api.v1.common.text.TextWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -19,6 +20,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,6 +30,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ServiceLoader;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public interface V1Common
@@ -53,14 +57,13 @@ public interface V1Common
 
     // FACTORIES
 
-    <T extends BlockEntity> BlockEntityType.Builder<T>
-    createBlockEntityType(BiFunction<BlockPos, BlockState, T> factory,
-                          Block... blocks);
+    <T extends BlockEntity> BlockEntityType.Builder<T> newBlockEntityType(BiFunction<BlockPos, BlockState, T> factory, Block... blocks);
 
-    <T extends ParticleOptions> ParticleType<T>
-    createParticleType(boolean alwaysSpawn,
-                       MapCodec<T> codec,
-                       StreamCodec<RegistryFriendlyByteBuf, T> streamCodec);
+    <T extends ParticleOptions> ParticleType<T> newParticleType(boolean alwaysSpawn, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec);
+
+    SimpleParticleType newParticleType(boolean alwaysSpawn);
+
+    <T extends Sensor<?>> SensorType<T> newSensorType(Supplier<T> factory);
 
     // COMMON
 
@@ -79,4 +82,6 @@ public interface V1Common
     <P1, P2, P3> Signal3<P1, P2, P3> newSignal3();
 
     CubicCurve newCubicCurse(int resolution);
+
+    ModBridge newModBridge(String id, String displayName);
 }

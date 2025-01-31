@@ -3,24 +3,26 @@ package dev.obscuria.fragmentum.core.v1.common.easing;
 import com.google.common.collect.Lists;
 import dev.obscuria.fragmentum.api.v1.common.easing.CubicCurve;
 import dev.obscuria.fragmentum.api.v1.common.easing.EasingFunction;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Comparator;
 import java.util.List;
 
-public final class CubicCurveImpl implements CubicCurve
+@ApiStatus.Internal
+public final class BaseCubicCurve implements CubicCurve
 {
     private final List<Point> rawPoints = Lists.newArrayList();
     private final List<Point> cachedPoints = Lists.newArrayList();
     private final int resolution;
     private boolean dirty;
 
-    public CubicCurveImpl(int resolution) {
+    public BaseCubicCurve(int resolution) {
         this.resolution = Math.min(Math.max(resolution, 0), 100);
         this.dirty = true;
     }
 
     @Override
-    public CubicCurveImpl addPoint(float x, float y) {
+    public BaseCubicCurve addPoint(float x, float y) {
         this.rawPoints.add(new Point(
                 Math.clamp(x, 0, 1),
                 Math.clamp(x, 0, 1)));

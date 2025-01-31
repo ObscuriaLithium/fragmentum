@@ -11,12 +11,14 @@ import io.netty.util.collection.IntObjectMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-public final class TextWrapperImpl implements TextWrapper
+@ApiStatus.Internal
+public final class BaseTextWrapper implements TextWrapper
 {
     private static final String BREAKER = "\n";
     private final String text;
@@ -27,12 +29,12 @@ public final class TextWrapperImpl implements TextWrapper
     private Style defaultStyle = Style.EMPTY;
     private int maxLength = 40;
 
-    public TextWrapperImpl(Component component)
+    public BaseTextWrapper(Component component)
     {
         this(component.getString());
     }
 
-    public TextWrapperImpl(String text)
+    public BaseTextWrapper(String text)
     {
         this.text = text;
     }

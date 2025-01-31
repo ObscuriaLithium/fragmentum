@@ -1,5 +1,8 @@
 package dev.obscuria.fragmentum.api.v1.common.easing;
 
+import org.jetbrains.annotations.ApiStatus;
+
+@ApiStatus.Internal
 final class EasingInternal
 {
     public static EasingFunction linear() {
@@ -179,5 +182,29 @@ final class EasingInternal
 
     public static EasingFunction easeOutInBounce() {
         return easeOutBounce().merge(easeInBounce());
+    }
+
+    public static EasingFunction scale(EasingFunction self, float scale)
+    {
+        return progress -> self.compute(Math.clamp(progress * (1f / scale), 0f, 1f));
+    }
+
+    public static EasingFunction reversed(EasingFunction self)
+    {
+        return progress -> 1f - self.compute(progress);
+    }
+
+    public static EasingFunction merge(EasingFunction self, EasingFunction other, float ratio)
+    {
+        return progress -> progress <= ratio
+                ? ratio * self.scale(ratio).compute(progress)
+                : ratio * self.compute(1f) + (1f - ratio) * other.scale(1f - ratio).compute(progress - ratio);
+    }
+
+    public static EasingFunction mergeOut(EasingFunction self, EasingFunction other, float ratio)
+    {
+        return progress -> progress <= ratio
+                ? self.scale(ratio).compute(progress)
+                : other.reversed().scale(1f - ratio).compute(progress - ratio);
     }
 }

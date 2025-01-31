@@ -1,8 +1,10 @@
 package dev.obscuria.fragmentum.core.v1.common.signal;
 
 import dev.obscuria.fragmentum.api.v1.common.signal.Signal1;
+import org.jetbrains.annotations.ApiStatus;
 
-public final class Signal1Impl<P1> extends SignalImpl<Signal1.Listener<P1>> implements Signal1<P1>
+@ApiStatus.Internal
+public final class BaseSignal1<P1> extends BaseSignal<Signal1.Listener<P1>> implements Signal1<P1>
 {
     public void emit(P1 p1)
     {

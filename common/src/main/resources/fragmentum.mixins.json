@@ -4,8 +4,12 @@
   "package": "dev.obscuria.fragmentum.core.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
-  "mixins": [],
-  "client": [],
+  "mixins": [
+    "MixinItemStack"
+  ],
+  "client": [
+    "client.MixinClientTooltipComponent"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

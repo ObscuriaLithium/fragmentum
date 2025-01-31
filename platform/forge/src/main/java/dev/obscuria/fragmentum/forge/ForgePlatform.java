@@ -4,7 +4,9 @@ import dev.obscuria.fragmentum.api.IPlatform;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLLoader;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public final class ForgePlatform implements IPlatform
 {
     @Override

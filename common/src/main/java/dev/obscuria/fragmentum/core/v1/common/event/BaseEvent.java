@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import dev.obscuria.fragmentum.api.v1.common.event.Event;
 import dev.obscuria.fragmentum.api.v1.common.event.EventHandler;
 import dev.obscuria.fragmentum.api.v1.common.event.EventToken;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.UUID;
 
-public final class EventImpl<T> implements Event<T>
+@ApiStatus.Internal
+public final class BaseEvent<T> implements Event<T>
 {
     private final List<Registration<T>> registrations = Lists.newArrayList();
     private boolean dirty;
@@ -22,7 +24,7 @@ public final class EventImpl<T> implements Event<T>
     @Override
     public EventToken register(int priority, T listener)
     {
-        final var token = new EventTokenImpl(UUID.randomUUID(), this);
+        final var token = new BaseEventToken(UUID.randomUUID(), this);
         this.registrations.add(new Registration<>(token, priority, listener));
         this.dirty = true;
         return token;

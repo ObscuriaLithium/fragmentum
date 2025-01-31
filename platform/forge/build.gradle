@@ -3,7 +3,7 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 plugins {
     id 'mod-platform'
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'org.spongepowered.mixin' version '0.7.+'
     id "com.modrinth.minotaur" version "2.+"
 }
 
@@ -64,18 +64,23 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 apply from: 'dependencies.gradle'
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            fg.component(it)
-        }
-    }
-}
-
 sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
+}
+
+tasks.register('buildRelease') {
+    dependsOn ':platform:forge:jarJar'
+    group = 'build'
+    doLast {
+        def output = rootProject.file("output/${version}")
+        copy {
+            from file("build/libs/${mod_id}-forge-${minecraft_version}-${version}-all.jar")
+            rename { it.replace('-all', '') }
+            into output
+        }
+    }
 }
 
 tasks.register('publishCurseForge', TaskPublishCurseForge) {

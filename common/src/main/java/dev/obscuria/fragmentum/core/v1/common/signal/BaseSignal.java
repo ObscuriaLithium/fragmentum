@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import dev.obscuria.fragmentum.api.v1.common.signal.Signal;
 import dev.obscuria.fragmentum.api.v1.common.signal.Signal0;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-abstract class SignalImpl<T> implements Signal<T>
+@ApiStatus.Internal
+abstract class BaseSignal<T> implements Signal<T>
 {
     private static final ResourceLocation UNBOUND = ResourceLocation.withDefaultNamespace("unbound");
     protected final List<Connection<T>> connections = Lists.newArrayList();

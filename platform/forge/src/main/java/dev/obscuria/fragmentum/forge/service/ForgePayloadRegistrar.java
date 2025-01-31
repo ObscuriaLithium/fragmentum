@@ -12,12 +12,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.SimpleChannel;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
+@ApiStatus.Internal
 public record ForgePayloadRegistrar(String modId) implements IPayloadRegistrar
 {
     private static final Map<String, Integer> discriminatorCounter = new ConcurrentHashMap<>();
@@ -38,11 +40,11 @@ public record ForgePayloadRegistrar(String modId) implements IPayloadRegistrar
     }
 
     @Override
-    public <T extends CustomPacketPayload> void
-    registerClientbound(Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<Player, T> handler)
+    public <T extends CustomPacketPayload> void registerClientbound(
+            Class<T> clazz,
+            CustomPacketPayload.Type<T> type,
+            StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
+            BiConsumer<Player, T> handler)
     {
         get(modId).messageBuilder(clazz, nextDiscriminator(modId), NetworkDirection.PLAY_TO_CLIENT)
                 .codec(streamCodec)
@@ -56,11 +58,11 @@ public record ForgePayloadRegistrar(String modId) implements IPayloadRegistrar
     }
 
     @Override
-    public <T extends CustomPacketPayload> void
-    registerServerbound(Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<ServerPlayer, T> handler)
+    public <T extends CustomPacketPayload> void registerServerbound(
+            Class<T> clazz,
+            CustomPacketPayload.Type<T> type,
+            StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
+            BiConsumer<ServerPlayer, T> handler)
     {
         get(modId).messageBuilder(clazz, nextDiscriminator(modId), NetworkDirection.PLAY_TO_SERVER)
                 .codec(streamCodec)

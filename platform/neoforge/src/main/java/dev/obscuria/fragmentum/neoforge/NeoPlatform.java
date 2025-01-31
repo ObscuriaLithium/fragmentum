@@ -4,7 +4,9 @@ import dev.obscuria.fragmentum.api.IPlatform;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public final class NeoPlatform implements IPlatform
 {
     @Override

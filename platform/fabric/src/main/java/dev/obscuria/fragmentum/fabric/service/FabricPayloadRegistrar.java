@@ -10,9 +10,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;
 
+@ApiStatus.Internal
 public record FabricPayloadRegistrar(String modId) implements IPayloadRegistrar
 {
     @Override
@@ -22,18 +24,20 @@ public record FabricPayloadRegistrar(String modId) implements IPayloadRegistrar
     public void allowServerOnly() {}
 
     @Override
-    public <T extends CustomPacketPayload> void
-    registerClientbound(Class<T> clazz,
-                        CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<Player, T> handler)
+    public <T extends CustomPacketPayload> void registerClientbound(
+            Class<T> clazz,
+            CustomPacketPayload.Type<T> type,
+            StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
+            BiConsumer<Player, T> handler)
     {
         PayloadTypeRegistry.playS2C().register(type, streamCodec);
         if (Fragmentum.PLATFORM.isDedicatedServer()) return;
-        ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) ->
+        {
             final var client = context.client();
             if (client == null) return;
-            client.execute(() -> {
+            client.execute(() ->
+            {
                 FabricV1Common.replyPacketSender = context.responseSender();
                 handler.accept(context.player(), payload);
                 FabricV1Common.replyPacketSender = null;
@@ -42,16 +46,18 @@ public record FabricPayloadRegistrar(String modId) implements IPayloadRegistrar
     }
 
     @Override
-    public <T extends CustomPacketPayload> void
-    registerServerbound(Class<T> clazz, CustomPacketPayload.Type<T> type,
-                        StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
-                        BiConsumer<ServerPlayer, T> handler)
+    public <T extends CustomPacketPayload> void registerServerbound(
+            Class<T> clazz, CustomPacketPayload.Type<T> type,
+            StreamCodec<RegistryFriendlyByteBuf, T> streamCodec,
+            BiConsumer<ServerPlayer, T> handler)
     {
         PayloadTypeRegistry.playC2S().register(type, streamCodec);
-        ServerPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
+        ServerPlayNetworking.registerGlobalReceiver(type, (payload, context) ->
+        {
             final var server = context.player().getServer();
             if (server == null) return;
-            server.execute(() -> {
+            server.execute(() ->
+            {
                 FabricV1Common.replyPacketSender = context.responseSender();
                 handler.accept(context.player(), payload);
                 FabricV1Common.replyPacketSender = null;

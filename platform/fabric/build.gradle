@@ -32,6 +32,15 @@ loom {
 
 apply from: 'dependencies.gradle'
 
+tasks.register('buildRelease') {
+    dependsOn ':platform:fabric:build'
+    group = 'build'
+    doLast {
+        def output = rootProject.file("output/${version}")
+        copy { from file("build/libs/${mod_id}-fabric-${minecraft_version}-${version}.jar") into output }
+    }
+}
+
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
     dependsOn ':buildAll'
     group = 'publishing'

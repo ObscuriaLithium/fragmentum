@@ -1,6 +1,7 @@
 plugins {
     id 'mod-common'
     id 'net.neoforged.moddev'
+    id 'maven-publish'
 }
 
 neoForge {
@@ -34,10 +35,93 @@ artifacts {
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
 }
 
-tasks.register('buildApi', Jar) {
+tasks.register('apiJar', Jar) {
     group = 'build'
-    from sourceSets.main.output
-    include 'dev/obscuria/fragmentum/api/**'
-    archiveFileName = "fragmentum-api-${minecraft_version}-${version}.jar"
+    description = 'Build JAR for the API package only'
+
+    def outputDir = rootProject.file("output/${version}/api")
+    def artifactName = "fragmentum-api"
+    def artifactVersion = "${minecraft_version}-${version}"
+
+    from(sourceSets.main.output) {
+        include 'dev/obscuria/fragmentum/api/**'
+    }
+
+    archiveBaseName.set(artifactName)
+    archiveVersion.set(artifactVersion)
+    destinationDirectory.set(outputDir)
 }
 
+tasks.register('apiSourcesJar', Jar) {
+    group = 'build'
+    description = 'Build sources JAR for the API package only'
+
+    def outputDir = rootProject.file("output/${version}/api")
+    def artifactName = "fragmentum-api"
+    def artifactVersion = "${minecraft_version}-${version}"
+
+    from(sourceSets.main.allSource) {
+        include 'dev/obscuria/fragmentum/api/**'
+    }
+
+    archiveBaseName.set(artifactName)
+    archiveVersion.set(artifactVersion)
+    archiveClassifier.set('sources')
+    destinationDirectory.set(outputDir)
+}
+
+tasks.register('apiJavadoc', Javadoc) {
+    group = 'documentation'
+    description = 'Generate Javadoc for the API package only'
+
+    source = sourceSets.main.allJava.matching {
+        include 'dev/obscuria/fragmentum/api/**'
+    }
+
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = file("${buildDir}/api-javadoc")
+}
+
+tasks.register('apiJavadocJar', Jar) {
+    group = 'documentation'
+    description = 'Build Javadoc JAR for the API package only'
+
+    def outputDir = rootProject.file("output/${version}/api")
+    def artifactName = "fragmentum-api"
+    def artifactVersion = "${minecraft_version}-${version}"
+
+    dependsOn tasks.named('apiJavadoc')
+    from(tasks.named('apiJavadoc').get().destinationDir)
+
+    archiveBaseName.set(artifactName)
+    archiveVersion.set(artifactVersion)
+    archiveClassifier.set('javadoc')
+    destinationDirectory.set(outputDir)
+}
+
+tasks.register('buildApiArtifacts') {
+    group = 'build'
+    description = 'Build all API artifacts'
+    dependsOn('apiJar', 'apiSourcesJar', 'apiJavadocJar')
+}
+
+publishing {
+    publications {
+        apiPublication(MavenPublication) {
+            groupId = 'dev.obscuria'
+            artifactId = 'fragmentum-api'
+            version = "${minecraft_version}-${version}"
+
+            artifact tasks.named('apiJar').get()
+            artifact tasks.named('apiSourcesJar').get()
+            artifact tasks.named('apiJavadocJar').get()
+        }
+    }
+
+    repositories {
+        maven {
+            name = "local"
+            url = rootProject.file("output/repo")
+        }
+    }
+}
