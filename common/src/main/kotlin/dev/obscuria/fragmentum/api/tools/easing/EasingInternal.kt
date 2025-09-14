@@ -6,8 +6,8 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-internal object EasingInternal
-{
+internal object EasingInternal {
+
     fun linear(): EasingFunction =
         EasingFunction { progress -> progress }
 
@@ -55,8 +55,7 @@ internal object EasingInternal
         EasingFunction { progress ->
             if (progress <= 0) 0f
             else if (progress >= 1) 1f
-            else
-            {
+            else {
                 (-2.0).pow((10f * progress - 10f).toDouble()).toFloat() * sin(
                     (progress * 10f - 10.75f) * ((2f * Math.PI) / 3f)
                 ).toFloat()
@@ -114,8 +113,7 @@ internal object EasingInternal
         EasingFunction { progress ->
             if (progress <= 0) 0f
             else if (progress >= 1) 1f
-            else
-            {
+            else {
                 (2.0.pow((-10f * progress).toDouble()) * sin(
                     (progress * 10f - 0.75f) * ((2f * Math.PI) / 3f)
                 ) + 1f).toFloat()
@@ -127,23 +125,19 @@ internal object EasingInternal
             var progress = progress
             val f1 = 7.5625f
             val f2 = 2.75f
-            when
-            {
+            when {
                 progress < 1f / f2 -> f1 * progress * progress
-                progress < 2 / f2 ->
-                {
+                progress < 2 / f2 -> {
                     progress -= 1.5f / f2
                     f1 * progress * progress + 0.75f
                 }
 
-                progress < 2.5 / f2 ->
-                {
+                progress < 2.5 / f2 -> {
                     progress -= 2.25f / f2
                     f1 * progress * progress + 0.9375f
                 }
 
-                else ->
-                {
+                else -> {
                     progress -= 2.625f / f2
                     f1 * progress * progress + 0.984375f
                 }
@@ -220,11 +214,9 @@ internal object EasingInternal
 
     fun merge(self: EasingFunction, other: EasingFunction, ratio: Float): EasingFunction =
         EasingFunction { progress ->
-            if (progress <= ratio)
-            {
+            if (progress <= ratio) {
                 ratio * self.scale(ratio).compute(progress)
-            } else
-            {
+            } else {
                 ratio * self.compute(1f) + (1f - ratio) *
                         other.scale(1f - ratio).compute(progress - ratio)
             }
@@ -232,11 +224,9 @@ internal object EasingInternal
 
     fun mergeOut(self: EasingFunction, other: EasingFunction, ratio: Float): EasingFunction =
         EasingFunction { progress ->
-            if (progress <= ratio)
-            {
+            if (progress <= ratio) {
                 self.scale(ratio).compute(progress)
-            } else
-            {
+            } else {
                 other.reversed().scale(1f - ratio).compute(progress - ratio)
             }
         }

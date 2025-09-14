@@ -6,6 +6,6 @@ plugins {
 }
 
 tasks.register("buildRelease") {
-    dependsOn(":common:buildRelease", "fabric:buildRelease")
+    dependsOn("common:buildRelease", "fabric:buildRelease")
     group = "build"
 }

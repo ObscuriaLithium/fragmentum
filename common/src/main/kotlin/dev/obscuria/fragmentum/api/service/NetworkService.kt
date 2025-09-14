@@ -7,9 +7,9 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 
-interface NetworkService
-{
-    fun payloadRegistrar(modId: String) : PayloadRegistrar
+interface NetworkService {
+
+    fun payloadRegistrar(modId: String): PayloadRegistrar
 
     fun <T : Any> reply(payload: T)
 

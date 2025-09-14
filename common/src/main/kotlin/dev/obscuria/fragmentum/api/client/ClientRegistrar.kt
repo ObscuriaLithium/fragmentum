@@ -1,9 +1,6 @@
 package dev.obscuria.fragmentum.api.client
 
-import dev.obscuria.fragmentum.api.registry.DeferredBlockEntity
-import dev.obscuria.fragmentum.api.registry.DeferredEntity
-import dev.obscuria.fragmentum.api.registry.DeferredItem
-import dev.obscuria.fragmentum.api.registry.DeferredParticle
+import dev.obscuria.fragmentum.api.registry.*
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.builders.LayerDefinition
@@ -12,14 +9,17 @@ import net.minecraft.client.particle.SpriteSet
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction
+import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 
-interface ClientRegistrar
-{
+interface ClientRegistrar {
+
     fun <T : Entity> registerEntityRenderer(
         type: DeferredEntity<T>,
         provider: EntityRendererProvider<T>
@@ -46,8 +46,13 @@ interface ClientRegistrar
     )
 
     fun registerItemColor(
-        provider: ItemColorProvider,
+        provider: (ItemStack, Int) -> Int,
         vararg items: DeferredItem<*>
+    )
+
+    fun registerBlockColor(
+        provider: (BlockState, BlockAndTintGetter?, BlockPos?, Int) -> Int,
+        vararg blocks: DeferredBlock<*>
     )
 
     fun registerItemProperty(
@@ -57,18 +62,11 @@ interface ClientRegistrar
 
     fun registerKeyMapping(keyMapping: KeyMapping)
 
-    fun interface ModelLayerProvider
-    {
+    fun interface ModelLayerProvider {
         fun create(): LayerDefinition
     }
 
-    fun interface TexturedParticleProvider<T : ParticleOptions>
-    {
+    fun interface TexturedParticleProvider<T : ParticleOptions> {
         fun create(spriteSet: SpriteSet): ParticleProvider<T>
-    }
-
-    fun interface ItemColorProvider
-    {
-        fun getColor(stack: ItemStack, layer: Int): Int
     }
 }

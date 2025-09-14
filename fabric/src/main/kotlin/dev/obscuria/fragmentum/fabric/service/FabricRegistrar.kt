@@ -19,20 +19,19 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import java.util.function.Supplier
 
-@JvmRecord
-internal data class FabricRegistrar(val modId: String) : Registrar
-{
+internal data class FabricRegistrar(val modId: String) : Registrar {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T, V : T> register(
         registryKey: ResourceKey<out Registry<T>>,
         id: ResourceLocation,
         supplier: Supplier<V>
-    ): Deferred<T, V>
-    {
+    ): Deferred<T, V> {
         return register(Regs.REGISTRY[registryKey.location()] as Registry<T>, id, supplier)
     }
 
@@ -40,63 +39,70 @@ internal data class FabricRegistrar(val modId: String) : Registrar
         registry: Registry<T>,
         id: ResourceLocation,
         supplier: Supplier<V>
-    ): Deferred<T, V>
-    {
-        return Deferred { Registry.registerForHolder(registry, id, supplier.get()!!) }
+    ): Deferred<T, V> {
+        val holder = Registry.registerForHolder(registry, id, supplier.get()!!)
+        return Deferred { holder }
     }
 
     override fun <T : Item> registerItem(
         id: ResourceLocation,
         supplier: Supplier<T>
-    ): DeferredItem<T>
-    {
-        return DeferredItem { Registry.registerForHolder(Regs.ITEM, id, supplier.get()) }
+    ): DeferredItem<T> {
+        val holder = Registry.registerForHolder(Regs.ITEM, id, supplier.get())
+        return DeferredItem { holder }
+    }
+
+    override fun <T : Block> registerBlock(
+        id: ResourceLocation,
+        supplier: Supplier<T>
+    ): DeferredBlock<T> {
+        val holder = Registry.registerForHolder(Regs.BLOCK, id, supplier.get())
+        return DeferredBlock { holder }
     }
 
     override fun registerAttribute(
         id: ResourceLocation,
         supplier: Supplier<Attribute>
-    ): DeferredAttribute
-    {
-        return DeferredAttribute { Registry.registerForHolder(Regs.ATTRIBUTE, id, supplier.get()) }
+    ): DeferredAttribute {
+        val holder = Registry.registerForHolder(Regs.ATTRIBUTE, id, supplier.get())
+        return DeferredAttribute { holder }
     }
 
     override fun <T : Entity> registerEntity(
         id: ResourceLocation,
         supplier: Supplier<EntityType<T>>
-    ): DeferredEntity<T>
-    {
-        return DeferredEntity { Registry.registerForHolder(Regs.ENTITY_TYPE, id, supplier.get()) }
+    ): DeferredEntity<T> {
+        val holder = Registry.registerForHolder(Regs.ENTITY_TYPE, id, supplier.get())
+        return DeferredEntity { holder }
     }
 
     override fun <T : BlockEntity> registerBlockEntity(
         id: ResourceLocation,
         supplier: Supplier<BlockEntityType<T>>
-    ): DeferredBlockEntity<T>
-    {
-        return DeferredBlockEntity { Registry.registerForHolder(Regs.BLOCK_ENTITY_TYPE, id, supplier.get()) }
+    ): DeferredBlockEntity<T> {
+        val holder = Registry.registerForHolder(Regs.BLOCK_ENTITY_TYPE, id, supplier.get())
+        return DeferredBlockEntity { holder }
     }
 
     override fun <T : MobEffect> registerMobEffect(
         id: ResourceLocation,
         supplier: Supplier<T>
-    ): DeferredMobEffect<T>
-    {
-        return DeferredMobEffect { Registry.registerForHolder(Regs.MOB_EFFECT, id, supplier.get()) }
+    ): DeferredMobEffect<T> {
+        val holder = Registry.registerForHolder(Regs.MOB_EFFECT, id, supplier.get())
+        return DeferredMobEffect { holder }
     }
 
     override fun <T : ParticleOptions> registerParticle(
         id: ResourceLocation,
         supplier: Supplier<ParticleType<T>>
-    ): DeferredParticle<T>
-    {
-        return DeferredParticle { Registry.registerForHolder(Regs.PARTICLE_TYPE, id, supplier.get()) }
+    ): DeferredParticle<T> {
+        val holder = Registry.registerForHolder(Regs.PARTICLE_TYPE, id, supplier.get())
+        return DeferredParticle { holder }
     }
 
     override fun <T> newRegistry(
         key: ResourceKey<Registry<T>>
-    ): UnifiedRegistry<T>
-    {
+    ): UnifiedRegistry<T> {
         return FabricUnifiedRegistry(
             FabricRegistryBuilder
                 .createSimple(key)
@@ -108,16 +114,14 @@ internal data class FabricRegistrar(val modId: String) : Registrar
     override fun <T> newDataRegistry(
         key: ResourceKey<Registry<T>>,
         codec: Supplier<Codec<T>>
-    )
-    {
+    ) {
         DynamicRegistries.register(key, codec.get())
     }
 
     override fun <T> newSyncedDataRegistry(
         key: ResourceKey<Registry<T>>,
         codec: Supplier<Codec<T>>
-    )
-    {
+    ) {
         DynamicRegistries.registerSynced(key, codec.get())
     }
 
@@ -125,16 +129,14 @@ internal data class FabricRegistrar(val modId: String) : Registrar
         key: ResourceKey<Registry<T>>,
         codec: Supplier<Codec<T>>,
         networkCodec: Supplier<Codec<T>>
-    )
-    {
+    ) {
         DynamicRegistries.registerSynced(key, codec.get(), networkCodec.get())
     }
 
     override fun registerAttributes(
         type: DeferredEntity<out LivingEntity>,
         builder: AttributeSupplier.Builder
-    )
-    {
+    ) {
         FabricDefaultAttributeRegistry.register(type.get(), builder)
     }
 }

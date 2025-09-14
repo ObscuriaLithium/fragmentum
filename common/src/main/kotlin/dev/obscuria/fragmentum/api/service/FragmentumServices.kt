@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.api.service
 
-import dev.obscuria.fragmentum.api.ModBridge
+import dev.obscuria.fragmentum.api.ModCompat
 import dev.obscuria.fragmentum.api.registry.Registrar
 import dev.obscuria.fragmentum.api.tools.easing.CubicCurve
 import dev.obscuria.fragmentum.api.tools.event.Event
@@ -10,8 +10,8 @@ import dev.obscuria.fragmentum.api.tools.signal.Signal2
 import dev.obscuria.fragmentum.api.tools.signal.Signal3
 import dev.obscuria.fragmentum.api.tools.text.TextWrapper
 
-interface FragmentumServices
-{
+interface FragmentumServices {
+
     fun registrar(modId: String): Registrar
 
     fun factory(): FactoryService
@@ -36,5 +36,5 @@ interface FragmentumServices
 
     fun newCubicCurse(resolution: Int): CubicCurve
 
-    fun newModBridge(id: String, displayName: String): ModBridge
+    fun newModBridge(id: String, displayName: String): ModCompat
 }

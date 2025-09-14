@@ -6,10 +6,9 @@ import dev.obscuria.fragmentum.core.world.AllOfTooltipComponent
 import org.jetbrains.annotations.ApiStatus.Internal
 
 @Internal
-object CoreFragmentumClient
-{
-    fun init()
-    {
+object CoreFragmentumClient {
+
+    fun init() {
         FragmentumClientRegistry.registerTooltipComponent(AllOfTooltipComponent::class.java) {
             AllOfClientTooltipComponent(it)
         }

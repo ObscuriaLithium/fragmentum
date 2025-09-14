@@ -9,8 +9,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.*
 import dev.obscuria.fragmentum.api.client.FragmentumClientEvents as Client
 import dev.obscuria.fragmentum.api.server.FragmentumServerEvents as Server
 
-fun commonInit()
-{
+fun commonInit() {
+
     CoreFragmentum.init()
 
     SERVER_STARTING.register { s -> Server.SERVER_STARTING broadcast { it.invoke(s) } }
@@ -22,8 +22,8 @@ fun commonInit()
     SERVER_STOPPED.register { s -> Server.SERVER_STOPPED broadcast { it.invoke(s) } }
 }
 
-fun clientInit()
-{
+fun clientInit() {
+
     CoreFragmentumClient.init()
 
     START.register { Client.START_RENDER.broadcast { it.invoke() } }

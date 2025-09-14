@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.api
 
-interface Platform
-{
+interface Platform {
+
     fun getPlatformName(): String
 
     fun isModLoaded(modId: String): Boolean

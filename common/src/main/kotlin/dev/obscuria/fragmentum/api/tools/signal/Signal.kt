@@ -2,14 +2,14 @@ package dev.obscuria.fragmentum.api.tools.signal
 
 import dev.obscuria.fragmentum.api.Fragmentum
 
-interface Signal<T>
-{
+interface Signal<T> {
+
     fun connect(listener: T, key: Any? = null, oneShot: Boolean = false, breaker: Signal0? = null)
 
     infix fun disconnect(key: Any)
 
-    companion object
-    {
+    companion object {
+
         fun newSignal0(): Signal0 = Fragmentum.SERVICES.newSignal0()
 
         fun <P1> newSignal1(): Signal1<P1> = Fragmentum.SERVICES.newSignal1()

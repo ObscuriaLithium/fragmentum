@@ -13,12 +13,13 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import java.util.function.Supplier
 
-interface Registrar
-{
+interface Registrar {
+
     fun <T, V : T> register(
         registryKey: ResourceKey<out Registry<T>>,
         id: ResourceLocation,
@@ -35,6 +36,11 @@ interface Registrar
         id: ResourceLocation,
         supplier: Supplier<T>
     ): DeferredItem<T>
+
+    fun <T : Block> registerBlock(
+        id: ResourceLocation,
+        supplier: Supplier<T>
+    ): DeferredBlock<T>
 
     fun registerAttribute(
         id: ResourceLocation,

@@ -33,12 +33,12 @@ class AllOfClientTooltipComponent(source: AllOfTooltipComponent) : ClientTooltip
         }
     }
 
-    override fun renderImage(font: Font, x: Int, y: Int, guiGraphics: GuiGraphics)
+    override fun renderImage(font: Font, x: Int, y: Int, graphics: GuiGraphics)
     {
         var offset = 0
         for (component in components)
         {
-            component.renderImage(font, x, y + offset, guiGraphics)
+            component.renderImage(font, x, y + offset, graphics)
             offset += component.height
         }
     }

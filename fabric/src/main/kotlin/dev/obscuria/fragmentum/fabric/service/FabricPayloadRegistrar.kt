@@ -15,9 +15,8 @@ import java.util.*
 import java.util.function.BiConsumer
 import java.util.function.Function
 
-@JvmRecord
-internal data class FabricPayloadRegistrar(val modId: String) : PayloadRegistrar
-{
+internal data class FabricPayloadRegistrar(val modId: String) : PayloadRegistrar {
+
     override fun allowClientOnly() {}
 
     override fun allowServerOnly() {}
@@ -27,8 +26,7 @@ internal data class FabricPayloadRegistrar(val modId: String) : PayloadRegistrar
         encoder: BiConsumer<T, FriendlyByteBuf>,
         decoder: Function<FriendlyByteBuf, T>,
         handler: BiConsumer<Player, T>
-    )
-    {
+    ) {
         val id = ResourceLocation(modId, "clientbound_" + clazz.simpleName.lowercase(Locale.getDefault()))
         val type = PacketType.create(id) { ClientboundWrapper(clazz, decoder.apply(it)) }
         clientboundRegistrations[clazz] = ClientboundRegistration(type, encoder)
@@ -46,8 +44,7 @@ internal data class FabricPayloadRegistrar(val modId: String) : PayloadRegistrar
         encoder: BiConsumer<T, FriendlyByteBuf>,
         decoder: Function<FriendlyByteBuf, T>,
         handler: BiConsumer<ServerPlayer, T>
-    )
-    {
+    ) {
         val id = ResourceLocation(modId, "serverbound_" + clazz.simpleName.lowercase(Locale.getDefault()))
         val type = PacketType.create(id) { ServerboundWrapper(clazz, decoder.apply(it)) }
         serverboundRegistrations[clazz] = ServerboundRegistration(type, encoder)
@@ -59,57 +56,47 @@ internal data class FabricPayloadRegistrar(val modId: String) : PayloadRegistrar
         }
     }
 
-    @JvmRecord
     @Suppress("UNCHECKED_CAST")
     data class ClientboundRegistration<T>(
         val type: PacketType<ClientboundWrapper<T>>,
         val encoder: BiConsumer<T, FriendlyByteBuf>
-    )
-    {
+    ) {
         fun encode(buf: FriendlyByteBuf, payload: Any) = encoder.accept(payload as T, buf)
     }
 
-    @JvmRecord
     @Suppress("UNCHECKED_CAST")
     data class ServerboundRegistration<T>(
         val type: PacketType<ServerboundWrapper<T>>,
         val encoder: BiConsumer<T, FriendlyByteBuf>
-    )
-    {
+    ) {
         fun encode(buf: FriendlyByteBuf, payload: Any) = encoder.accept(payload as T, buf)
     }
 
-    @JvmRecord
-    data class ClientboundWrapper<T>(val clazz: Class<*>, val payload: T & Any) : FabricPacket
-    {
+    data class ClientboundWrapper<T>(val clazz: Class<*>, val payload: T & Any) : FabricPacket {
         override fun write(buf: FriendlyByteBuf) = clientboundRegistrations[clazz]!!.encode(buf, this.payload)
 
         override fun getType(): PacketType<*> = clientboundRegistrations[clazz]!!.type
     }
 
-    @JvmRecord
-    data class ServerboundWrapper<T>(val clazz: Class<*>, val payload: T & Any) : FabricPacket
-    {
+    data class ServerboundWrapper<T>(val clazz: Class<*>, val payload: T & Any) : FabricPacket {
         override fun write(buf: FriendlyByteBuf) = serverboundRegistrations[clazz]!!.encode(buf, this.payload)
 
         override fun getType(): PacketType<*> = serverboundRegistrations[clazz]!!.type
     }
 
-    companion object
-    {
+    companion object {
+
         val clientboundRegistrations: MutableMap<Class<*>, ClientboundRegistration<*>> = Maps.newHashMap()
         val serverboundRegistrations: MutableMap<Class<*>, ServerboundRegistration<*>> = Maps.newHashMap()
 
-        fun clientbound(payload: Any): FabricPacket
-        {
+        fun clientbound(payload: Any): FabricPacket {
             require(clientboundRegistrations.containsKey(payload.javaClass)) {
                 "No clientbound packet registered for " + payload.javaClass.simpleName
             }
             return ClientboundWrapper(payload.javaClass, payload)
         }
 
-        fun serverbound(payload: Any): FabricPacket
-        {
+        fun serverbound(payload: Any): FabricPacket {
             require(serverboundRegistrations.containsKey(payload.javaClass)) {
                 "No serverbound packet registered for " + payload.javaClass.simpleName
             }

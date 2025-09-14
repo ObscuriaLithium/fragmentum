@@ -6,8 +6,8 @@ import net.minecraft.world.entity.player.Player
 import java.util.function.BiConsumer
 import java.util.function.Function
 
-interface PayloadRegistrar
-{
+interface PayloadRegistrar {
+
     fun allowClientOnly()
 
     fun allowServerOnly()

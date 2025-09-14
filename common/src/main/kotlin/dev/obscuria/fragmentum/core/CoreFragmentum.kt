@@ -15,15 +15,13 @@ import java.util.*
 import java.util.function.Consumer
 
 @Internal
-object CoreFragmentum
-{
-    fun init()
-    {
+object CoreFragmentum {
+
+    fun init() {
     }
 
     @JvmStatic
-    fun modifyTooltip(stack: ItemStack, consumer: Consumer<Component>)
-    {
+    fun modifyTooltip(stack: ItemStack, consumer: Consumer<Component>) {
         if (!stack.item.javaClass.isAnnotationPresent(AutoDescription::class.java)) return
         val annotation = stack.item.javaClass.getAnnotation(AutoDescription::class.java)
         val id = BuiltInRegistries.ITEM.getKey(stack.item)
@@ -36,8 +34,7 @@ object CoreFragmentum
     }
 
     @JvmStatic
-    fun gatherTooltipImages(stack: ItemStack, defaultImage: Optional<TooltipComponent>): Optional<TooltipComponent>
-    {
+    fun gatherTooltipImages(stack: ItemStack, defaultImage: Optional<TooltipComponent>): Optional<TooltipComponent> {
         val customImages = Lists.newArrayList<TooltipComponent>()
         FragmentumEvents.GATHER_TOOLTIP_IMAGES broadcast { listener -> listener.invoke(stack, customImages::add) }
         if (customImages.isEmpty()) return defaultImage

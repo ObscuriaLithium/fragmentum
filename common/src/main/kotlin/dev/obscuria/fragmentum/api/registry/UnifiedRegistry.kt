@@ -6,8 +6,8 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
-interface UnifiedRegistry<T>
-{
+interface UnifiedRegistry<T> {
+
     val key: ResourceKey<out Registry<T>>
 
     val name: ResourceLocation

@@ -5,10 +5,9 @@ import dev.obscuria.fragmentum.core.CoreFragmentum
 import net.minecraftforge.fml.common.Mod
 
 @Mod(Fragmentum.MODID)
-class ForgeFragmentum
-{
-    init
-    {
+class ForgeFragmentum {
+
+    init {
         Fragmentum.LOGGER.info("Hello Forge world from Kotlin!")
         CoreFragmentum.init()
     }

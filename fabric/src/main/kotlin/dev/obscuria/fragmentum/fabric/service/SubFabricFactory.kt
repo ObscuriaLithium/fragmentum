@@ -16,13 +16,12 @@ import net.minecraft.world.level.block.state.BlockState
 import java.util.function.BiFunction
 import java.util.function.Supplier
 
-internal class SubFabricFactory : FactoryService
-{
+internal class SubFabricFactory : FactoryService {
+
     override fun <T : BlockEntity> newBlockEntityType(
         factory: BiFunction<BlockPos, BlockState, T>,
         vararg blocks: Block
-    ): BlockEntityType.Builder<T>
-    {
+    ): BlockEntityType.Builder<T> {
         return BlockEntityType.Builder.of(factory::apply, *blocks)
     }
 
@@ -30,29 +29,23 @@ internal class SubFabricFactory : FactoryService
         alwaysSpawn: Boolean,
         codec: Codec<T>,
         deserializer: ParticleOptions.Deserializer<T>
-    ): ParticleType<T>
-    {
-        return object : ParticleType<T>(alwaysSpawn, deserializer)
-        {
-            override fun codec(): Codec<T>
-            {
+    ): ParticleType<T> {
+        return object : ParticleType<T>(alwaysSpawn, deserializer) {
+            override fun codec(): Codec<T> {
                 return codec
             }
         }
     }
 
-    override fun newParticleType(alwaysSpawn: Boolean): SimpleParticleType
-    {
+    override fun newParticleType(alwaysSpawn: Boolean): SimpleParticleType {
         return FabricParticleTypes.simple(alwaysSpawn)
     }
 
-    override fun <T : Sensor<*>?> newSensorType(factory: Supplier<T>): SensorType<T>
-    {
+    override fun <T : Sensor<*>?> newSensorType(factory: Supplier<T>): SensorType<T> {
         return SensorType(factory)
     }
 
-    companion object
-    {
+    companion object {
         internal val INSTANCE = SubFabricFactory()
     }
 }

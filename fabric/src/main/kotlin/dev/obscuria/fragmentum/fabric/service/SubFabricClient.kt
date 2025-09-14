@@ -7,20 +7,20 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.world.inventory.tooltip.TooltipComponent
 import java.util.function.Function
 
-internal class SubFabricClient : ClientService
-{
-    override fun registrar(modId: String): ClientRegistrar = FabricClientRegistrar(modId)
+internal class SubFabricClient : ClientService {
+
+    override fun registrar(modId: String): ClientRegistrar {
+        return FabricClientRegistrar(modId)
+    }
 
     override fun <T : TooltipComponent> registerTooltipComponent(
         type: Class<T>,
         factory: Function<T, ClientTooltipComponent>
-    )
-    {
+    ) {
         TooltipComponentRegistry.register(type, factory)
     }
 
-    companion object
-    {
+    companion object {
         val INSTANCE = SubFabricClient()
     }
 }

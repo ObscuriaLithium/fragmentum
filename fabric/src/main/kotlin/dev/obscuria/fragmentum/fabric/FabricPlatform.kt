@@ -4,25 +4,21 @@ import dev.obscuria.fragmentum.api.Platform
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 
-class FabricPlatform : Platform
-{
-    override fun getPlatformName(): String
-    {
+class FabricPlatform : Platform {
+
+    override fun getPlatformName(): String {
         return "Fabric"
     }
 
-    override fun isModLoaded(modId: String): Boolean
-    {
+    override fun isModLoaded(modId: String): Boolean {
         return FabricLoader.getInstance().isModLoaded(modId)
     }
 
-    override fun isClient(): Boolean
-    {
+    override fun isClient(): Boolean {
         return FabricLoader.getInstance().environmentType == EnvType.CLIENT
     }
 
-    override fun isDevelopmentEnvironment(): Boolean
-    {
+    override fun isDevelopmentEnvironment(): Boolean {
         return FabricLoader.getInstance().isDevelopmentEnvironment
     }
 }

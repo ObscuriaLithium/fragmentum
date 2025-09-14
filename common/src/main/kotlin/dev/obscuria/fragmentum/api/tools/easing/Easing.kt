@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec
 import net.minecraft.util.StringRepresentable
 import java.util.*
 
-enum class Easing(private val function: EasingFunction) : EasingFunction, StringRepresentable
-{
+enum class Easing(private val function: EasingFunction) : EasingFunction, StringRepresentable {
+
     LINEAR(EasingInternal.linear()),
     CEIL(EasingInternal.ceil()),
     FLOOR(EasingInternal.floor()),
@@ -54,12 +54,16 @@ enum class Easing(private val function: EasingFunction) : EasingFunction, String
     EASE_OUT_IN_ELASTIC(EasingInternal.easeOutInElastic()),
     EASE_OUT_IN_BOUNCE(EasingInternal.easeOutInBounce());
 
-    override fun compute(delta: Float): Float = function.compute(delta)
+    override fun compute(delta: Float): Float {
+        return function.compute(delta)
+    }
 
-    override fun getSerializedName(): String = toString().lowercase(Locale.getDefault())
+    override fun getSerializedName(): String {
+        return toString().lowercase(Locale.getDefault())
+    }
 
-    companion object
-    {
+    companion object {
+
         val CODEC: Codec<Easing> = StringRepresentable.fromEnum { entries.toTypedArray() }
     }
 }

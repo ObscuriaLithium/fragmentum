@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.api.tools.event
 
-interface EventToken
-{
+interface EventToken {
+
     fun unregister()
 }

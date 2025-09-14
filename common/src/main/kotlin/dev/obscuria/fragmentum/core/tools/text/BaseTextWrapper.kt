@@ -6,105 +6,154 @@ import io.netty.util.collection.IntObjectMap
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
-import java.util.function.Function
 
-class BaseTextWrapper(private val text: String) : TextWrapper
-{
+class BaseTextWrapper(private val text: String) : TextWrapper {
     private val prefixByLine: IntObjectMap<String> = IntObjectHashMap()
     private val styleByLine: IntObjectMap<Style> = IntObjectHashMap()
-    private var fragment = Function<String, Component> { text: String -> Component.literal(text) }
+    private var fragment: (String) -> Component = { Component.literal(it) }
     private var defaultPrefix = ""
     private var defaultStyle: Style = Style.EMPTY
     private var maxLength = 40
 
-    override fun withMaxLength(length: Int): TextWrapper
-    {
+    override fun withMaxLength(length: Int): TextWrapper {
         this.maxLength = length
         return this
     }
 
-    override fun withPrefix(prefix: String): TextWrapper
-    {
+    override fun withPrefix(prefix: String): TextWrapper {
         this.defaultPrefix = prefix
         return this
     }
 
-    override fun withLinePrefix(index: Int, prefix: String): TextWrapper
-    {
+    override fun withLinePrefix(index: Int, prefix: String): TextWrapper {
         prefixByLine.put(index, prefix)
         return this
     }
 
-    override fun withStyle(style: Style): TextWrapper
-    {
+    override fun withStyle(style: Style): TextWrapper {
         this.defaultStyle = style
         return this
     }
 
-    override fun withLineStyle(index: Int, style: Style): TextWrapper
-    {
+    override fun withLineStyle(index: Int, style: Style): TextWrapper {
         styleByLine.put(index, style)
         return this
     }
 
-    override fun fragment(function: Function<String, Component>): TextWrapper
-    {
+    override fun fragment(function: (String) -> Component): TextWrapper {
         this.fragment = function
         return this
     }
 
-    override fun build(): List<Component>
-    {
-        return try
-        {
-            val result = mutableListOf<Component>()
-            val words = text.replace(BREAKER, " #$# ").split(" ".toRegex()).filterNot { it.isBlank() }
-            val iterator = words.iterator()
+    override fun build(): List<Component> {
 
-            while (iterator.hasNext())
-            {
-                val line = Component.literal(prefixByLine.getOrDefault(result.size, defaultPrefix))
-                val firstWord = iterator.next()
-                if (firstWord == "#$#")
-                {
-                    result.add(line.withStyle(styleByLine.getOrDefault(result.size, defaultStyle)))
-                    continue
-                }
-                line.append(fragment.apply(firstWord))
+        val result = ArrayList<Component>(8)
 
-                while (iterator.hasNext())
-                {
-                    val nextWord = iterator.next()
-                    if (nextWord == "#$#")
-                    {
-                        iterator.next()
-                        break
-                    }
-                    val finalWord = fragment.apply(nextWord)
-                    if (getLength(line.string + " " + finalWord.string) > maxLength)
-                    {
-                        break
-                    }
-                    line.append(" ").append(finalWord)
+        var i = 0
+        val length = text.length
+        val wordBuffer = StringBuilder(16)
+        val words = ArrayList<String>(length / 5)
+
+        while (i < length) {
+            when (val char = text[i++]) {
+                ' ' -> flushWord(wordBuffer) { words.add(it) }
+                '\n' -> {
+                    flushWord(wordBuffer) { words.add(it) }
+                    words.add("#$#")
                 }
 
+                else -> wordBuffer.append(char)
+            }
+        }
+
+        flushWord(wordBuffer) { words.add(it) }
+
+        val iter = words.listIterator()
+        while (iter.hasNext()) {
+            val prefix = prefixByLine.getOrDefault(result.size, defaultPrefix)
+            val line = Component.literal(prefix)
+
+            val firstWord = iter.next()
+            if (firstWord == "#$#") {
                 result.add(line.withStyle(styleByLine.getOrDefault(result.size, defaultStyle)))
+                continue
+            }
+            line.append(fragment(firstWord))
+
+            // Чтобы не пересоздавать строки, считаем длину вручную
+            var currentLength = prefix.length + firstWord.length
+
+            while (iter.hasNext()) {
+                val nextWord = iter.next()
+                if (nextWord == "#$#") break
+
+                val wordLength = nextWord.length + 1 // +1 за пробел
+                if (currentLength + wordLength > maxLength) {
+                    iter.previous() // вернуть слово обратно
+                    break
+                }
+
+                line.append(" ").append(fragment(nextWord))
+                currentLength += wordLength
             }
 
-            result
+            result.add(line.withStyle(styleByLine.getOrDefault(result.size, defaultStyle)))
         }
-        catch (e: Exception)
-        {
-            emptyList()
-        }
+
+        return result
     }
 
-    companion object
-    {
+    private inline fun flushWord(buffer: StringBuilder, consumer: (String) -> Unit) {
+        if (buffer.isEmpty()) return
+        consumer(buffer.toString())
+        buffer.setLength(0)
+    }
+
+//    override fun build(): List<Component>
+//    {
+//        return try
+//        {
+//            val result = mutableListOf<Component>()
+//            val words = text.replace(BREAKER, " #$# ").split(" ".toRegex()).filterNot { it.isBlank() }
+//
+//            val iterator = words.listIterator()
+//            while (iterator.hasNext()) {
+//                val line = Component.literal(prefixByLine.getOrDefault(result.size, defaultPrefix))
+//                val firstWord = iterator.next()
+//                if (firstWord == "#$#") {
+//                    result.add(line.withStyle(styleByLine.getOrDefault(result.size, defaultStyle)))
+//                    continue
+//                }
+//                line.append(fragment.apply(firstWord))
+//
+//                while (iterator.hasNext()) {
+//                    val nextWord = iterator.next()
+//                    if (nextWord == "#$#") {
+//                        break
+//                    }
+//                    val finalWord = fragment.apply(nextWord)
+//                    if (getLength(line.string + " " + finalWord.string) > maxLength) {
+//                        iterator.previous()
+//                        break
+//                    }
+//                    line.append(" ").append(finalWord)
+//                }
+//
+//                result.add(line.withStyle(styleByLine.getOrDefault(result.size, defaultStyle)))
+//            }
+//
+//            result
+//        }
+//        catch (e: Exception)
+//        {
+//            emptyList()
+//        }
+//    }
+
+    companion object {
         private const val BREAKER = "\n"
 
-        fun getLength(string: String?): Int
-        {
+        fun getLength(string: String?): Int {
             return ChatFormatting.stripFormatting(string)!!.length
         }
     }

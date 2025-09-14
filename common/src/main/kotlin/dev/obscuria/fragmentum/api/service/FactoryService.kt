@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.BlockState
 import java.util.function.BiFunction
 import java.util.function.Supplier
 
-interface FactoryService
-{
+interface FactoryService {
+
     fun <T : BlockEntity> newBlockEntityType(
         factory: BiFunction<BlockPos, BlockState, T>,
         vararg blocks: Block

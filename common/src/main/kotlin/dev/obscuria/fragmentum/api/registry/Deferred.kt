@@ -1,17 +1,10 @@
-package dev.obscuria.fragmentum.api.registry;
+package dev.obscuria.fragmentum.api.registry
 
-import com.google.common.base.Suppliers
 import net.minecraft.core.Holder
-import java.util.function.Supplier
 
 @Suppress("UNCHECKED_CAST")
-open class Deferred<T, V : T>(supplier: Supplier<Holder<T>>) : Supplier<V>
-{
-    private val source: Supplier<Holder<T>> = Suppliers.memoize(supplier::get)
+open class Deferred<T, V : T>(supplier: () -> Holder<T>) : HolderProvider<T>, ValueProvider<V> {
 
-    fun holder(): Holder<T> = source.get()
-
-    fun value(): V = holder().value() as V
-
-    override fun get(): V = value()
+    override val holder: Holder<T> by lazy { supplier.invoke() }
+    override val value: V by lazy { holder.value() as V }
 }

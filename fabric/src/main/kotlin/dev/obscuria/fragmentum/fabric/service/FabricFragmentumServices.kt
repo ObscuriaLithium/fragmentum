@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.fabric.service
 
-import dev.obscuria.fragmentum.api.ModBridge
+import dev.obscuria.fragmentum.api.ModCompat
 import dev.obscuria.fragmentum.api.registry.Registrar
 import dev.obscuria.fragmentum.api.service.*
 import dev.obscuria.fragmentum.api.tools.easing.CubicCurve
@@ -10,7 +10,7 @@ import dev.obscuria.fragmentum.api.tools.signal.Signal1
 import dev.obscuria.fragmentum.api.tools.signal.Signal2
 import dev.obscuria.fragmentum.api.tools.signal.Signal3
 import dev.obscuria.fragmentum.api.tools.text.TextWrapper
-import dev.obscuria.fragmentum.core.client.BaseModBridge
+import dev.obscuria.fragmentum.core.client.BaseModCompat
 import dev.obscuria.fragmentum.core.tools.event.BaseCubicCurve
 import dev.obscuria.fragmentum.core.tools.event.BaseEvent
 import dev.obscuria.fragmentum.core.tools.signal.BaseSignal0
@@ -19,8 +19,8 @@ import dev.obscuria.fragmentum.core.tools.signal.BaseSignal2
 import dev.obscuria.fragmentum.core.tools.signal.BaseSignal3
 import dev.obscuria.fragmentum.core.tools.text.BaseTextWrapper
 
-class FabricFragmentumServices : FragmentumServices
-{
+class FabricFragmentumServices : FragmentumServices {
+
     override fun registrar(modId: String): Registrar = FabricRegistrar(modId)
 
     override fun factory(): FactoryService = SubFabricFactory.INSTANCE
@@ -45,5 +45,5 @@ class FabricFragmentumServices : FragmentumServices
 
     override fun newCubicCurse(resolution: Int): CubicCurve = BaseCubicCurve(resolution)
 
-    override fun newModBridge(id: String, displayName: String): ModBridge = BaseModBridge(id, displayName)
+    override fun newModBridge(id: String, displayName: String): ModCompat = BaseModCompat(id, displayName)
 }

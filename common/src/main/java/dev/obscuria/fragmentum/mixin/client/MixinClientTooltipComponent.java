@@ -9,11 +9,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientTooltipComponent.class)
-public interface MixinClientTooltipComponent
-{
+public interface MixinClientTooltipComponent {
+
     @Inject(method = "create(Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent;", at = @At("HEAD"), cancellable = true)
-    private static void create_modify(TooltipComponent component, CallbackInfoReturnable<ClientTooltipComponent> info)
-    {
+    private static void create_modify(TooltipComponent component, CallbackInfoReturnable<ClientTooltipComponent> info) {
         TooltipComponentRegistry.create(component).ifPresent(info::setReturnValue);
     }
 }

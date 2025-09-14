@@ -7,9 +7,8 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
-@JvmRecord
-internal data class FabricUnifiedRegistry<T>(val source: Registry<T>) : UnifiedRegistry<T>
-{
+internal data class FabricUnifiedRegistry<T>(val source: Registry<T>) : UnifiedRegistry<T> {
+
     override val key: ResourceKey<out Registry<T>>
         get() = source.key()
 

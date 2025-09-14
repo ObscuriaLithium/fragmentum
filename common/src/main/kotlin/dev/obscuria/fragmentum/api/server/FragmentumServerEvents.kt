@@ -5,8 +5,8 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.resources.CloseableResourceManager
 
-object FragmentumServerEvents
-{
+object FragmentumServerEvents {
+
     val SERVER_STARTING: Event<Start> = Event.create()
     val SERVER_STARTED: Event<Start> = Event.create()
 
@@ -20,33 +20,27 @@ object FragmentumServerEvents
     val SERVER_STOPPING: Event<Stop> = Event.create()
     val SERVER_STOPPED: Event<Stop> = Event.create()
 
-    fun interface Start
-    {
+    fun interface Start {
         fun invoke(server: MinecraftServer)
     }
 
-    fun interface StartDataReload
-    {
+    fun interface StartDataReload {
         fun invoke(server: MinecraftServer, manager: CloseableResourceManager)
     }
 
-    fun interface EndDataReload
-    {
+    fun interface EndDataReload {
         fun invoke(server: MinecraftServer, manager: CloseableResourceManager, success: Boolean)
     }
 
-    fun interface SyncData
-    {
+    fun interface SyncData {
         fun invoke(player: ServerPlayer, joined: Boolean)
     }
 
-    fun interface Save
-    {
+    fun interface Save {
         fun invoke(server: MinecraftServer, flush: Boolean, force: Boolean)
     }
 
-    fun interface Stop
-    {
+    fun interface Stop {
         fun invoke(server: MinecraftServer)
     }
 }

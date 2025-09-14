@@ -16,20 +16,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Mixin(ItemStack.class)
-public abstract class MixinItemStack
-{
+public abstract class MixinItemStack {
+
     @Inject(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Ljava/util/List;Lnet/minecraft/world/item/TooltipFlag;)V"))
     private void getTooltipLines_modify(
             Player player, TooltipFlag flag,
             CallbackInfoReturnable<List<Component>> info,
-            @Local List<Component> tooltip)
-    {
+            @Local List<Component> tooltip) {
         CoreFragmentum.modifyTooltip((ItemStack) (Object) this, tooltip::add);
     }
 
     @Inject(method = "getTooltipImage", at = @At("RETURN"), cancellable = true)
-    private void getTooltipImage_override(CallbackInfoReturnable<Optional<TooltipComponent>> info)
-    {
+    private void getTooltipImage_override(CallbackInfoReturnable<Optional<TooltipComponent>> info) {
         info.setReturnValue(CoreFragmentum.gatherTooltipImages((ItemStack) (Object) this, info.getReturnValue()));
     }
 }

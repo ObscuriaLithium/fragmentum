@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.api.tools.easing
 
-fun interface EasingFunction
-{
+fun interface EasingFunction {
+
     fun compute(delta: Float): Float
 
     fun scale(scale: Float): EasingFunction =
