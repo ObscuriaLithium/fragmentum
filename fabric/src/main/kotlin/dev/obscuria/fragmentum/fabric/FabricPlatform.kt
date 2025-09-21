@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.fabric
 
-import dev.obscuria.fragmentum.api.Platform
+import dev.obscuria.fragmentum.Platform
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 

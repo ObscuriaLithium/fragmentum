@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.obscuria.fragmentum.core.CoreFragmentum;
+import dev.obscuria.fragmentum.Fragmentum;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -18,16 +18,21 @@ import java.util.Optional;
 @Mixin(ItemStack.class)
 public abstract class MixinItemStack {
 
-    @Inject(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Ljava/util/List;Lnet/minecraft/world/item/TooltipFlag;)V"))
-    private void getTooltipLines_modify(
+    @Inject(method = "getTooltipLines", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Ljava/util/List;Lnet/minecraft/world/item/TooltipFlag;)V"))
+    private void modifyTooltipLines(
             Player player, TooltipFlag flag,
             CallbackInfoReturnable<List<Component>> info,
             @Local List<Component> tooltip) {
-        CoreFragmentum.modifyTooltip((ItemStack) (Object) this, tooltip::add);
+
+        Fragmentum.INSTANCE.modifyTooltip((ItemStack) (Object) this, tooltip::add);
     }
 
     @Inject(method = "getTooltipImage", at = @At("RETURN"), cancellable = true)
-    private void getTooltipImage_override(CallbackInfoReturnable<Optional<TooltipComponent>> info) {
-        info.setReturnValue(CoreFragmentum.gatherTooltipImages((ItemStack) (Object) this, info.getReturnValue()));
+    private void modifyTooltipImages(CallbackInfoReturnable<Optional<TooltipComponent>> info) {
+
+        var stack = (ItemStack) (Object) this;
+        info.setReturnValue(Fragmentum.INSTANCE.gatherTooltipImages(stack, info.getReturnValue()));
     }
 }

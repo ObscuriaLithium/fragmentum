@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.forge.platform
 
-import dev.obscuria.fragmentum.api.Platform
+import dev.obscuria.fragmentum.Platform
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.fml.loading.FMLLoader

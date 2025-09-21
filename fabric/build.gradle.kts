@@ -5,6 +5,10 @@ plugins {
 
 val modId: String by project
 
+repositories {
+    maven { url = uri("https://maven.terraformersmc.com/releases/") }
+}
+
 dependencies {
     minecraft(libs.minecraft)
     mappings(loom.layered {
@@ -13,8 +17,9 @@ dependencies {
     })
     modImplementation(libs.fabricLoader)
     modImplementation(libs.fabricApi)
-
     modImplementation(libs.flk)
+
+    modImplementation("com.terraformersmc:modmenu:7.2.2")
 }
 
 loom {
@@ -28,28 +33,25 @@ loom {
     runs {
         named("client") {
             client()
-            setConfigName("Fabric Client")
+            configName = "Fabric Client"
             ideConfigGenerated(true)
             runDir("runs/client")
         }
         named("server") {
             server()
-            setConfigName("Fabric Server")
+            configName = "Fabric Server"
             ideConfigGenerated(true)
             runDir("runs/server")
         }
     }
 }
 
-tasks.register("buildRelease") {
-    dependsOn("build")
-    group = "build"
-
+tasks.register("releaseFabric") {
+    dependsOn(tasks.named("build"))
     doLast {
-        val output = rootProject.file("output/$version")
         copy {
             from(file("build/libs/$modId-fabric-${libs.versions.minecraft.get()}-$version.jar"))
-            into(output)
+            into(rootProject.file("output/$version"))
         }
     }
 }
@@ -60,7 +62,10 @@ publishing {
             groupId = "dev.obscuria"
             artifactId = "fragmentum-fabric"
             version = "${libs.versions.minecraft.get()}-$version"
-            artifact(tasks.named<Jar>("jar").get())
+
+            artifact(tasks.named<Jar>("jar").get()) {
+                classifier = null
+            }
         }
     }
 

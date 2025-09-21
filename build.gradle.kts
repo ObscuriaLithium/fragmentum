@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.moddev) apply false
 }
 
-tasks.register("buildRelease") {
-    dependsOn("common:buildRelease", "fabric:buildRelease")
+tasks.register("releaseAll") {
+    dependsOn("api:releaseApi", "fabric:releaseFabric")
     group = "build"
 }

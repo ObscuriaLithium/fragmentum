@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.forge
 
-import dev.obscuria.fragmentum.api.Fragmentum
+import dev.obscuria.fragmentum.Fragmentum
 import dev.obscuria.fragmentum.core.CoreFragmentum
 import net.minecraftforge.fml.common.Mod
 
