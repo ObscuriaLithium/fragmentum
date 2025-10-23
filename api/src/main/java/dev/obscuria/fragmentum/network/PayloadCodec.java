@@ -8,10 +8,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
-public interface PayloadCodec<T>
-{
-    static <T> PayloadCodec<T> registryFriendly(Codec<T> codec, Supplier<RegistryAccess> registryAccess)
-    {
+public interface PayloadCodec<T> {
+
+    static <T> PayloadCodec<T> registryFriendly(Codec<T> codec, Supplier<RegistryAccess> registryAccess) {
         throw new NotImplementedException();
     }
 

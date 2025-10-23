@@ -41,10 +41,10 @@ public record ARGB(
     public ARGB lerp(ARGB to, float delta)
     {
         return new ARGB(
-                Mth.lerp(alpha, to.alpha, delta),
-                Mth.lerp(red, to.red, delta),
-                Mth.lerp(green, to.green, delta),
-                Mth.lerp(blue, to.blue, delta));
+                Mth.lerp(delta, alpha, to.alpha),
+                Mth.lerp(delta, red, to.red),
+                Mth.lerp(delta, green, to.green),
+                Mth.lerp(delta, blue, to.blue));
     }
 
     public RGB toRGB()

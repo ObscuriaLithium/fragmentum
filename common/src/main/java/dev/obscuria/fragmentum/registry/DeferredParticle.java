@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import org.apache.commons.lang3.NotImplementedException;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Supplier;
@@ -19,6 +18,7 @@ public class DeferredParticle<T extends ParticleOptions> extends Deferred<Partic
 
     public @Nullable SimpleParticleType simple()
     {
-        throw new NotImplementedException();
+        if (get() instanceof SimpleParticleType simple) return simple;
+        return null;
     }
 }

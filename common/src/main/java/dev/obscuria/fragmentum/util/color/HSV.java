@@ -43,9 +43,9 @@ public record HSV(
     public HSV lerp(HSV to, float delta)
     {
         return new HSV(
-                Mth.lerp(hue, to.hue, delta),
-                Mth.lerp(saturation, to.saturation, delta),
-                Mth.lerp(value, to.value, delta));
+                Mth.lerp(delta, hue, to.hue),
+                Mth.lerp(delta, saturation, to.saturation),
+                Mth.lerp(delta, value, to.value));
     }
 
     public RGB toRGB()

@@ -39,9 +39,9 @@ public record RGB(
     public RGB lerp(RGB to, float delta)
     {
         return new RGB(
-                Mth.lerp(red, to.red, delta),
-                Mth.lerp(green, to.green, delta),
-                Mth.lerp(blue, to.blue, delta));
+                Mth.lerp(delta, red, to.red),
+                Mth.lerp(delta, green, to.green),
+                Mth.lerp(delta, blue, to.blue));
     }
 
     public ARGB toARGB(float alpha)

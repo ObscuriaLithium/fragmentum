@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.function.Supplier;
 
@@ -19,11 +18,11 @@ public class DeferredItem<T extends Item> extends Deferred<Item, T> implements I
     @Override
     public Item asItem()
     {
-        throw new NotImplementedException();
+        return get();
     }
 
     public ItemStack instantiate()
     {
-        throw new NotImplementedException();
+        return asItem().getDefaultInstance();
     }
 }
