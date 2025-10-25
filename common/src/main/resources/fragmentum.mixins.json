@@ -4,7 +4,9 @@
   "package": "dev.obscuria.fragmentum.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [],
+  "mixins": [
+    "MixinMinecraftServer"
+  ],
   "client": [],
   "server": [],
   "injectors": {
