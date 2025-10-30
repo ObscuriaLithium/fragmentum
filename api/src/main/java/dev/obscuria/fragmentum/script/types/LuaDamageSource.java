@@ -6,9 +6,10 @@ import net.minecraft.world.damagesource.DamageSource;
 public class LuaDamageSource extends LuaWrapper<DamageSource> {
 
     public static final LuaOps<DamageSource> OPS = null;
+    public static final LuaOps.Nilable<DamageSource> NIL_OPS = null;
 
     public LuaDamageSource(final DamageSource entity) {
-        super(entity);
+        super(entity, null);
     }
 
     @Override

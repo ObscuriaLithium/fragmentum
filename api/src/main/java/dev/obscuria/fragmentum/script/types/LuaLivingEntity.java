@@ -6,9 +6,10 @@ import net.minecraft.world.entity.LivingEntity;
 public class LuaLivingEntity<T extends LivingEntity> extends LuaEntity<T> {
 
     public static final LuaOps<LivingEntity> OPS = null;
+    public static final LuaOps.Nilable<LivingEntity> NIL_OPS = null;
 
     public LuaLivingEntity(T entity) {
-        super(entity);
+        super(entity, null);
     }
 
     @Override

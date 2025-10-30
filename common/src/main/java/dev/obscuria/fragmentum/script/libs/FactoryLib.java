@@ -6,8 +6,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import org.luaj.vm2.LuaValue;
 
 @SuppressWarnings("all")
 public class FactoryLib extends LuaWrapper<Object> {
@@ -15,7 +15,7 @@ public class FactoryLib extends LuaWrapper<Object> {
     private static final Object DUMMY = new Object();
 
     public FactoryLib() {
-        super(DUMMY);
+        super(DUMMY, LuaOps.nonnil(o -> LuaValue.NIL, v -> DUMMY));
     }
 
     @Override
@@ -24,10 +24,9 @@ public class FactoryLib extends LuaWrapper<Object> {
         builder.put("damageSourceOf", method2(LuaResourceKey.OPS, LuaEntity.OPS, LuaDamageSource.OPS, FactoryLib::damageSourceOf));
     }
 
-    @SuppressWarnings("unchecked")
     private static DamageSource damageSourceOf(Object self, ResourceKey<?> type, Entity attacker) {
         final var lookup = FragmentumProxy.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
-        final var damageType = lookup.getOrThrow((ResourceKey<DamageType>) type);
+        final var damageType = type.cast(Registries.DAMAGE_TYPE).map(lookup::getOrThrow).orElseThrow();
         return new DamageSource(damageType, attacker);
     }
 

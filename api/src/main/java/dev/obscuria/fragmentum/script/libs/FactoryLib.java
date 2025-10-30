@@ -6,7 +6,7 @@ import dev.obscuria.fragmentum.script.types.LuaWrapper;
 public class FactoryLib extends LuaWrapper<Object> {
 
     public FactoryLib() {
-        super(null);
+        super(null, null);
     }
 
     @Override

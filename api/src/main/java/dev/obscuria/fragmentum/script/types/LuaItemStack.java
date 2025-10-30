@@ -6,9 +6,10 @@ import net.minecraft.world.item.ItemStack;
 public class LuaItemStack extends LuaWrapper<ItemStack> {
 
     public static final LuaOps<ItemStack> OPS = null;
+    public static final LuaOps.Nilable<ItemStack> NIL_OPS = null;
 
     public LuaItemStack(final ItemStack stack) {
-        super(stack);
+        super(stack, null);
     }
 
     @Override

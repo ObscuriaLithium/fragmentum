@@ -1,13 +1,16 @@
 package dev.obscuria.fragmentum.script.types;
 
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+import org.luaj.vm2.LuaValue;
 
 public class LuaLevel extends LuaWrapper<Level> {
 
     public static final LuaOps<Level> OPS;
+    public static final LuaOps.Nilable<Level> NIL_OPS;
 
     public LuaLevel(Level value) {
-        super(value);
+        super(value, OPS);
     }
 
     @Override
@@ -16,7 +19,20 @@ public class LuaLevel extends LuaWrapper<Level> {
         builder.put("isDay", method0(LuaOps.BOOL, Level::isDay));
     }
 
+    private static LuaValue valueOf(@Nullable Level source) {
+        return source == null ? LuaValue.NIL : new LuaLevel(source);
+    }
+
+    private static @Nullable Level nilableSourceOf(LuaValue value) {
+        return value.isnil() ? null : ((LuaLevel) value).getSource();
+    }
+
+    private static Level nonnilSourceOf(LuaValue value) {
+        return ((LuaLevel) value).getSource();
+    }
+
     static {
-        OPS = new LuaOps.Instance<>(LuaLevel::new, value -> ((LuaLevel) value).getSource());
+        OPS = LuaOps.nonnil(LuaLevel::valueOf, LuaLevel::nonnilSourceOf);
+        NIL_OPS = LuaOps.nilable(LuaLevel::valueOf, LuaLevel::nilableSourceOf);
     }
 }
