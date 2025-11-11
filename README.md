@@ -9,6 +9,6 @@ Fragmentum is the lightweight core framework that simplifies the creation and ma
 ### Project Pages
 
 - [Curseforge (Fabric)](https://www.curseforge.com/minecraft/mc-mods/fragmentum-fabric)
-- [Curseforge (Forge)](https://www.curseforge.com/minecraft/mc-mods/fragmentum-fabric)
-- [Curseforge (NeoForge)](https://www.curseforge.com/minecraft/mc-mods/fragmentum-fabric)
+- [Curseforge (Forge)](https://www.curseforge.com/minecraft/mc-mods/fragmentum-forge)
+- [Curseforge (NeoForge)](https://www.curseforge.com/minecraft/mc-mods/fragmentum-neoforge)
 - [Modrinth](https://modrinth.com/mod/fragmentum)
