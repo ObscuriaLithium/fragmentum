@@ -1,9 +1,9 @@
 package dev.obscuria.fragmentum.util.signal;
 
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.compress.utils.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public abstract class Signal<T>
 {
     private static final ResourceLocation UNBOUND = new ResourceLocation("unbound");
-    private final List<Connection<T>> connections = Lists.newArrayList();
+    private final List<Connection<T>> connections = new ArrayList<>();
 
     public void connect(T listener)
     {

@@ -13,4 +13,6 @@ public interface FragmentumServices
     ServerService server();
 
     ClientService client();
+
+    ConfigService config();
 }

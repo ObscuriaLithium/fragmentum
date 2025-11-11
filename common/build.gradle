@@ -15,9 +15,20 @@ legacyForge {
 }
 
 dependencies {
+
+    // Mixins
     compileOnly("org.spongepowered:mixin:0.8.5")
     compileOnly("io.github.llamalad7:mixinextras-common:0.5.0")
     annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0")
+
+    // Configs
+    api("fuzs.forgeconfigapiport:forgeconfigapiport-common:${config_version}")
+
+    // Lua Interpreter
+    // Temporarily use figura fork for compatibility with other mods
+    //compileOnly("org.luaj:luaj-jse:3.0.1")
+    compileOnly('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
+    compileOnly('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
 }
 
 configurations {

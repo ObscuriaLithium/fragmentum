@@ -35,4 +35,9 @@ public final class ForgeServices implements FragmentumServices
     {
         return ForgeClientService.INSTANCE;
     }
+
+    @Override
+    public ConfigService config() {
+        return ForgeConfigService.INSTANCE;
+    }
 }

@@ -43,18 +43,32 @@ repositories {
         url = 'https://maven.blamejared.com'
     }
     maven {
+        name = "Terraformers MC"
         url = 'https://maven.terraformersmc.com/releases/'
+    }
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    maven {
+        url 'https://jitpack.io'
+        content {
+            includeGroup "com.github.FiguraMC.luaj"
+        }
     }
 }
 
 dependencies {
+
     implementation("org.jetbrains:annotations:24.1.0")
     implementation("com.google.code.findbugs:jsr305:3.0.1")
     compileOnly("org.checkerframework:checker-qual:3.43.0")
     annotationProcessor("org.checkerframework:checker:3.43.0")
-
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
+
+    api('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
+    api('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
 }
 
 // Declare capabilities on the outgoing configurations.
@@ -93,27 +107,28 @@ jar {
 
 processResources {
     var expandProps = [
-            'version'                      : version,
-            'group'                        : project.group, //Else we target the task's group.
-            'minecraft_version'            : minecraft_version,
-            'minecraft_version_range'      : minecraft_version_range,
-            'fabric_version'               : fabric_version,
-            'fabric_loader_version'        : fabric_loader_version,
-            'mod_name'                     : mod_name,
-            'mod_author'                   : mod_author,
-            'mod_id'                       : mod_id,
-            'license'                      : license,
-            'description'                  : project.description,
-            "forge_version"                : forge_version,
-            "forge_loader_version_range"   : forge_loader_version_range,
-            'credits'                      : credits,
-            'java_version'                 : java_version,
-            'curseforge_fabric'            : curseforge_fabric,
-            'curseforge_forge'             : curseforge_forge,
-            'modrinth'                     : modrinth,
-            'sources'                      : sources,
-            'issues'                       : issues,
-            'discord'                      : discord
+            'version'                   : version,
+            'group'                     : project.group, //Else we target the task's group.
+            'minecraft_version'         : minecraft_version,
+            'config_version'            : config_version,
+            'minecraft_version_range'   : minecraft_version_range,
+            'fabric_version'            : fabric_version,
+            'fabric_loader_version'     : fabric_loader_version,
+            'mod_name'                  : mod_name,
+            'mod_author'                : mod_author,
+            'mod_id'                    : mod_id,
+            'license'                   : license,
+            'description'               : project.description,
+            "forge_version"             : forge_version,
+            "forge_loader_version_range": forge_loader_version_range,
+            'credits'                   : credits,
+            'java_version'              : java_version,
+            'curseforge_fabric'         : curseforge_fabric,
+            'curseforge_forge'          : curseforge_forge,
+            'modrinth'                  : modrinth,
+            'sources'                   : sources,
+            'issues'                    : issues,
+            'discord'                   : discord
     ]
 
     var jsonExpandProps = expandProps.collectEntries {

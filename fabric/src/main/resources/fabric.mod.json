@@ -28,7 +28,8 @@
         "java": ">=17",
         "minecraft": ">=${minecraft_version}",
         "fabricloader": ">=0.14",
-        "fabric": "*"
+        "fabric": "*",
+        "forgeconfigapiport": ">=${config_version}"
     },
     "custom": {
         "modmenu": {
