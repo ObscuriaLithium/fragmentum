@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public final class FragmentumProxy {
 
@@ -14,6 +15,10 @@ public final class FragmentumProxy {
 
     public static MinecraftServer server() {
         return Objects.requireNonNull(server);
+    }
+
+    public static Optional<MinecraftServer> optionalServer() {
+        return Optional.ofNullable(server);
     }
 
     public static RegistryAccess registryAccess() {

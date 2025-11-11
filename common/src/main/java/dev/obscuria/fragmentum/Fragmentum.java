@@ -1,6 +1,8 @@
 package dev.obscuria.fragmentum;
 
+import dev.obscuria.fragmentum.client.FragmentumClient;
 import dev.obscuria.fragmentum.service.FragmentumServices;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,5 +17,11 @@ public interface Fragmentum
     Platform PLATFORM = ServiceLoader.load(Platform.class).findFirst().orElseThrow();
     FragmentumServices SERVICES = ServiceLoader.load(FragmentumServices.class).findFirst().orElseThrow();
 
-    static void init() {}
+    static ResourceLocation key(String name) {
+        return new ResourceLocation(MOD_ID, name);
+    }
+
+    static void init() {
+        if (PLATFORM.isClient()) FragmentumClient.init();
+    }
 }

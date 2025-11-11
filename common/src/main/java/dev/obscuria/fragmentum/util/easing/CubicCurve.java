@@ -1,16 +1,16 @@
 package dev.obscuria.fragmentum.util.easing;
 
 import net.minecraft.util.Mth;
-import org.apache.commons.compress.utils.Lists;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 @SuppressWarnings("unused")
 public final class CubicCurve
 {
-    private final List<Point> controlPoints = Lists.newArrayList();
-    private final List<Point> points = Lists.newArrayList();
+    private final List<Point> controlPoints = new ArrayList<>();
+    private final List<Point> points = new ArrayList<>();
     private final int resolution;
     private boolean isDirty = true;
 

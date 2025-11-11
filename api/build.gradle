@@ -15,16 +15,16 @@ legacyForge {
 }
 
 dependencies {
-    compileOnly("org.spongepowered:mixin:0.8.5")
-    implementation("com.google.code.findbugs:jsr305:3.0.1")
 
+    // Mixins
+    compileOnly("org.spongepowered:mixin:0.8.5")
     compileOnly("io.github.llamalad7:mixinextras-common:0.5.0")
     annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0")
 
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
-
-    jarJar("org.luaj:luaj-jse:3.0.1")
+    // Lua Interpreter
+    //jarJar("org.luaj:luaj-jse:3.0.1")
+    jarJar('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
+    jarJar('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
 }
 
 configurations {

@@ -1,7 +1,6 @@
 package dev.obscuria.fragmentum.util.event;
 
-import org.apache.commons.compress.utils.Lists;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +8,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public final class Event<T>
 {
-    private final List<Registration<T>> registrations = Lists.newArrayList();
+    private final List<Registration<T>> registrations = new ArrayList<>();
     private boolean dirty = false;
 
     public EventToken register(T listener)
