@@ -1,7 +1,5 @@
 package dev.obscuria.fragmentum.config;
 
-import net.minecraft.client.resources.language.I18n;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
@@ -41,9 +39,9 @@ public interface ConfigOptions {
         return value == null ? field.getName() : value.value();
     }
 
-    static void applyComment(Field field, Consumer<String> consumer) {
+    static void applyComment(Field field, Consumer<String[]> consumer) {
         final var comment = field.getAnnotation(Comment.class);
-        if (comment != null) consumer.accept(I18n.get(comment.value()));
+        if (comment != null) consumer.accept(comment.value().split("//"));
     }
 
     static double getRangeMin(Field field) {
