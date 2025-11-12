@@ -1,4 +1,4 @@
-# <center>Fragmentum</center>
+# Fragmentum
 
 <center>
   <a href="https://www.curseforge.com/minecraft/mc-mods/fragmentum-fabric" rel="nofollow"><img alt="Fabric" src="https://img.shields.io/badge/Fabric-5b213b?style=for-the-badge"></a>
