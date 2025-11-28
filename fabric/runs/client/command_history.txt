@@ -1,2 +1,0 @@
-/datapack
-/datapack list

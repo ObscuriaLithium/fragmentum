@@ -31,7 +31,11 @@ public final class FabricConfigService implements ConfigService {
 
     private void registerInternal(String modId, ConfigBuilder builder, ModConfig.Type type) {
         final var spec = builder.specBuilder.build();
-        NeoForgeConfigRegistry.INSTANCE.register(modId, type, spec);
+        if (builder.fileName == null) {
+            NeoForgeConfigRegistry.INSTANCE.register(modId, type, spec);
+        } else {
+            NeoForgeConfigRegistry.INSTANCE.register(modId, type, spec, builder.fileName);
+        }
         if (Fragmentum.PLATFORM.isDedicatedServer()) return;
         ConfigScreenFactoryRegistry.INSTANCE.register(modId, ConfigurationScreen::new);
     }

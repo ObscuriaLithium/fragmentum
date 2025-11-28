@@ -32,7 +32,11 @@ public final class NeoConfigService implements ConfigService {
     private void registerInternal(String modId, ConfigBuilder builder, ModConfig.Type type) {
         final var spec = builder.specBuilder.build();
         final var container = ModLoadingContext.get().getActiveContainer();
-        container.registerConfig(type, spec);
+        if (builder.fileName == null) {
+            container.registerConfig(type, spec);
+        } else {
+            container.registerConfig(type, spec, builder.fileName);
+        }
         if (Fragmentum.PLATFORM.isDedicatedServer()) return;
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }

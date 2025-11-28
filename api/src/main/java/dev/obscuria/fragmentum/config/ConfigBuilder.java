@@ -9,6 +9,8 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public final class ConfigBuilder {
 
+    public ConfigBuilder() {}
+
     public ConfigBuilder(String fileName) {}
 
     public ConfigBuilder comment(String comment) {

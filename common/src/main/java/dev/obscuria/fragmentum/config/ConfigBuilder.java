@@ -2,6 +2,7 @@ package dev.obscuria.fragmentum.config;
 
 import dev.obscuria.fragmentum.Fragmentum;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -11,7 +12,12 @@ import java.util.function.Supplier;
 public final class ConfigBuilder {
 
     public final ModConfigSpec.Builder specBuilder;
-    public final String fileName;
+    public final @Nullable String fileName;
+
+    public ConfigBuilder() {
+        this.specBuilder = new ModConfigSpec.Builder();
+        this.fileName = null;
+    }
 
     public ConfigBuilder(String fileName) {
         this.specBuilder = new ModConfigSpec.Builder();
