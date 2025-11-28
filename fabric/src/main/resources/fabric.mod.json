@@ -1,0 +1,43 @@
+{
+    "schemaVersion": 1,
+    "id": "fragmentum",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "homepage": "${curseforge_fabric}",
+        "sources": "${sources}",
+        "issues": "${issues}"
+    },
+    "license": "${license}",
+    "icon": "${mod_id}.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "dev.obscuria.fragmentum.fabric.FabricFragmentum"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json",
+        "${mod_id}.fabric.mixins.json"
+    ],
+    "depends": {
+        "java": ">=17",
+        "minecraft": ">=${minecraft_version}",
+        "fabricloader": ">=0.14",
+        "fabric": "*",
+        "forgeconfigapiport": ">=${config_version}"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "${discord}"
+            },
+            "badges": [ "library" ]
+        }
+    }
+}
+  
