@@ -2,6 +2,7 @@ package dev.obscuria.fragmentum.config;
 
 import dev.obscuria.fragmentum.Fragmentum;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,12 @@ import java.util.function.Predicate;
 public final class ConfigBuilder {
 
     public final ForgeConfigSpec.Builder specBuilder;
-    public final String fileName;
+    public final @Nullable String fileName;
+
+    public ConfigBuilder() {
+        this.specBuilder = new ForgeConfigSpec.Builder();
+        this.fileName = null;
+    }
 
     public ConfigBuilder(String fileName) {
         this.specBuilder = new ForgeConfigSpec.Builder();

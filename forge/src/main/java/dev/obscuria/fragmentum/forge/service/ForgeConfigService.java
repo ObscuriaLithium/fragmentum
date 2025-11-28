@@ -34,7 +34,11 @@ public final class ForgeConfigService implements ConfigService {
 
     private void registerInternal(String modId, ConfigBuilder builder, ModConfig.Type type) {
         final var spec = builder.specBuilder.build();
-        ModLoadingContext.get().registerConfig(type, spec);
+        if (builder.fileName == null) {
+            ModLoadingContext.get().registerConfig(type, spec);
+        } else {
+            ModLoadingContext.get().registerConfig(type, spec, builder.fileName);
+        }
     }
 
     @Override

@@ -33,7 +33,11 @@ public final class FabricConfigService implements ConfigService {
 
     private void registerInternal(String modId, ConfigBuilder builder, ModConfig.Type type) {
         final var spec = builder.specBuilder.build();
-        ForgeConfigRegistry.INSTANCE.register(modId, type, spec);
+        if (builder.fileName == null) {
+            ForgeConfigRegistry.INSTANCE.register(modId, type, spec);
+        } else {
+            ForgeConfigRegistry.INSTANCE.register(modId, type, spec, builder.fileName);
+        }
     }
 
     @Override

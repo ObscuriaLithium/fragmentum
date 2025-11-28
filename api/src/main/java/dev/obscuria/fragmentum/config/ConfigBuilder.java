@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 @SuppressWarnings("unused")
 public final class ConfigBuilder {
 
+    public ConfigBuilder() {}
+
     public ConfigBuilder(String fileName) {}
 
     public ConfigBuilder comment(String comment) {
