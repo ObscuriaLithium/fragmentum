@@ -1,10 +1,17 @@
 package dev.obscuria.fragmentum.service;
 
+import dev.obscuria.fragmentum.config.ConfigBuilder;
 import dev.obscuria.fragmentum.config.ConfigLayout;
 
 import java.util.function.Consumer;
 
 public interface ConfigService {
+
+    void registerClient(String modId, ConfigBuilder builder);
+
+    void registerCommon(String modId, ConfigBuilder builder);
+
+    void registerServer(String modId, ConfigBuilder builder);
 
     <T extends ConfigLayout> void registerClient(String modId, T layout, Consumer<T> listener);
 

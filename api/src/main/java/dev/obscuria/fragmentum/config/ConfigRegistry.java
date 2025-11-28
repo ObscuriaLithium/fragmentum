@@ -4,6 +4,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.function.Consumer;
 
+@Deprecated
 @SuppressWarnings("unused")
 public interface ConfigRegistry {
 

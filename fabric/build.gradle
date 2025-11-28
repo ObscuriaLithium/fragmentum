@@ -108,7 +108,6 @@ tasks.register('curseforge', TaskPublishCurseForge) {
 }
 
 modrinth {
-
     token = System.getenv("MD_TOKEN")
     projectId = modrinth_project_id
     uploadFile = rootProject.file("output/${version}/${mod_id}-${project.name}-${minecraft_version}-${version}.jar")

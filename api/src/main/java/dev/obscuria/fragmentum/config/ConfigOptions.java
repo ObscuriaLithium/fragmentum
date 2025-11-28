@@ -3,6 +3,7 @@ package dev.obscuria.fragmentum.config;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+@Deprecated
 @SuppressWarnings("unused")
 public interface ConfigOptions {
 

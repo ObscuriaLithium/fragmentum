@@ -4,6 +4,7 @@ import dev.obscuria.fragmentum.Fragmentum;
 
 import java.util.function.Consumer;
 
+@Deprecated
 @SuppressWarnings("unused")
 public interface ConfigRegistry {
 

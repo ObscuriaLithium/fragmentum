@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
+@Deprecated
 @SuppressWarnings("unused")
 public interface ConfigOptions {
 

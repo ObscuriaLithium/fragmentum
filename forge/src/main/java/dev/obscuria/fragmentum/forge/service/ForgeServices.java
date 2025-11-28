@@ -3,36 +3,42 @@ package dev.obscuria.fragmentum.forge.service;
 import dev.obscuria.fragmentum.forge.registry.ForgeRegistrar;
 import dev.obscuria.fragmentum.registry.Registrar;
 import dev.obscuria.fragmentum.service.*;
+import net.minecraftforge.fml.ModList;
 
-public final class ForgeServices implements FragmentumServices
-{
+import java.nio.file.Path;
+import java.util.Optional;
+
+public final class ForgeServices implements FragmentumServices {
+
     @Override
-    public Registrar registrar(String modId)
-    {
+    public Optional<Path> resolveRootPath(String modId) {
+        var container = ModList.get().getModContainerById(modId).orElseThrow();
+        final var modFile = container.getModInfo().getOwningFile().getFile();
+        return Optional.of(modFile.getSecureJar().getRootPath());
+    }
+
+    @Override
+    public Registrar registrar(String modId) {
         return new ForgeRegistrar(modId);
     }
 
     @Override
-    public FactoryService factory()
-    {
+    public FactoryService factory() {
         return ForgeFactoryService.INSTANCE;
     }
 
     @Override
-    public NetworkService network()
-    {
+    public NetworkService network() {
         return ForgeNetworkService.INSTANCE;
     }
 
     @Override
-    public ServerService server()
-    {
+    public ServerService server() {
         return ForgeServerService.INSTANCE;
     }
 
     @Override
-    public ClientService client()
-    {
+    public ClientService client() {
         return ForgeClientService.INSTANCE;
     }
 
