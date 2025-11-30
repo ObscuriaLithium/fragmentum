@@ -14,7 +14,9 @@ import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraft.world.flag.FeatureFlagSet;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -53,6 +55,7 @@ public final class FragmentumLayer {
 
         public Resources(String packId, Path root) {
             super(packId, root, true);
+            createDirectories(root);
         }
 
         @Override
@@ -63,6 +66,14 @@ public final class FragmentumLayer {
             final var resource = manager.getResource(ICON);
             if (resource.isEmpty()) return null;
             return resource.orElseThrow()::open;
+        }
+
+        private void createDirectories(Path path) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException exception) {
+                Fragmentum.LOGGER.error("Failed to create directories: {}", path, exception);
+            }
         }
     }
 }

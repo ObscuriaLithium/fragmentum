@@ -15,14 +15,12 @@ legacyForge {
 }
 
 dependencies {
-
     // Mixins
     compileOnly("org.spongepowered:mixin:0.8.5")
     compileOnly("io.github.llamalad7:mixinextras-common:0.5.0")
     annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0")
-
     // Lua Interpreter
-    //jarJar("org.luaj:luaj-jse:3.0.1")
+    // jarJar("org.luaj:luaj-jse:3.0.1")
     jarJar('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
     jarJar('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
 }
@@ -43,30 +41,8 @@ artifacts {
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
 }
 
-tasks.register("releaseApi") {
-    dependsOn(tasks.named("build"))
-    doLast {
-        copy {
-            from(file("build/libs/${mod_id}-${project.name}-${minecraft_version}-${version}.jar"))
-            into(rootProject.file("output/$version"))
-        }
-    }
-}
-
-publishing {
-    publications {
-        create("apiPublication", MavenPublication) {
-            groupId = "dev.obscuria"
-            artifactId = "fragmentum-api"
-            version = "${minecraft_version}-${version}"
-            artifact(tasks.named("jar").get())
-        }
-    }
-
-    repositories {
-        maven {
-            name = "local"
-            url = uri("${rootProject.projectDir}/output/repo")
-        }
-    }
+hekate {
+    metadata = uri(metadata_lookup)
+    shouldPublishToCurseForge = false
+    shouldPublishToModrinth = false
 }

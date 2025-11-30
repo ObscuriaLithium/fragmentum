@@ -1,0 +1,2 @@
+- Fixed a crash that occurred in some cases when the `config/fragmentum` directory was missing.
+- Integrated the Forge update checker.

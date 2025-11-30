@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'dev.obscuria.hekate'
 }
 
 base {
@@ -128,7 +129,8 @@ processResources {
             'modrinth'                  : modrinth,
             'sources'                   : sources,
             'issues'                    : issues,
-            'discord'                   : discord
+            'discord'                   : discord,
+            'update_lookup'             : update_lookup
     ]
 
     var jsonExpandProps = expandProps.collectEntries {
@@ -148,14 +150,34 @@ processResources {
 
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
+        create("api", MavenPublication) {
+            groupId = "dev.obscuria"
+            artifactId = "fragmentum-${project.name}"
+            version = "${minecraft_version}-${version}"
+
+            artifact(tasks.named("jar").get()) {
+                classifier = null
+            }
         }
     }
     repositories {
         maven {
-            url System.getenv('local_maven_url')
+            name = "ObscuriaMaven"
+            url = uri("/Users/obscuria/Modding/maven")
+        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ObscuriaLithium/modding")
+            credentials {
+                username = project.findProperty("github.actor")
+                password = project.findProperty("github.token")
+            }
         }
     }
+}
+
+tasks.register("publishAll") {
+    setGroup("publishing")
+    dependsOn("publishApiPublicationToObscuriaMavenRepository")
+    dependsOn("publishApiPublicationToGitHubPackagesRepository")
 }
