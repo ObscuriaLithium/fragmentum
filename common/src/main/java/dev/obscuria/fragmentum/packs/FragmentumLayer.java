@@ -29,7 +29,9 @@ public final class FragmentumLayer {
 
         public static Source create(PackType type) {
             final var root = Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
-            return new Source(root.resolve("config/" + Fragmentum.MOD_ID), type);
+            final var directory = root.resolve("config/" + Fragmentum.MOD_ID);
+            createDirectories(directory);
+            return new Source(directory, type);
         }
 
         @Override
@@ -39,6 +41,14 @@ public final class FragmentumLayer {
                     "generated/fragmentum_layer", Component.literal("Fragmentum Layer"),
                     true, packId -> new Resources(packId, directory),
                     metadata, type, Pack.Position.TOP, false, PackSource.BUILT_IN));
+        }
+
+        private static void createDirectories(Path directory) {
+            try {
+                Files.createDirectories(directory);
+            } catch (IOException exception) {
+                Fragmentum.LOGGER.error("Failed to create directories: {}", directory, exception);
+            }
         }
 
         static {
@@ -55,7 +65,6 @@ public final class FragmentumLayer {
 
         public Resources(String packId, Path root) {
             super(packId, root, true);
-            createDirectories(root);
         }
 
         @Override
@@ -66,14 +75,6 @@ public final class FragmentumLayer {
             final var resource = manager.getResource(ICON);
             if (resource.isEmpty()) return null;
             return resource.orElseThrow()::open;
-        }
-
-        private void createDirectories(Path path) {
-            try {
-                Files.createDirectories(path);
-            } catch (IOException exception) {
-                Fragmentum.LOGGER.error("Failed to create directories: {}", path, exception);
-            }
         }
     }
 }
