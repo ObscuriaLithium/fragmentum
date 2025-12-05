@@ -1,36 +1,40 @@
 package dev.obscuria.fragmentum.util.easing;
 
-import net.minecraft.util.Mth;
-
 @SuppressWarnings("unused")
 @FunctionalInterface
-public interface EasingFunction
-{
+public interface EasingFunction {
+
     float compute(float delta);
 
-    default EasingFunction reverse()
-    {
+    default EasingFunction reverse() {
         return progress -> 1f - this.compute(progress);
     }
 
-    default EasingFunction scale(float scale)
-    {
-        return progress -> this.compute(Mth.clamp(progress * (1f / scale), 0f, 1f));
+    default EasingFunction scale(float scale) {
+        return progress -> this.compute(progress * (1f / scale));
     }
 
-    default EasingFunction merge(EasingFunction other, float ratio)
-    {
+    default EasingFunction merge(EasingFunction other, float ratio) {
         return progress -> {
-            if (progress <= ratio) return ratio * this.scale(ratio).compute(progress);
-            return ratio * this.compute(1f) + (1f - ratio) * other.scale(1f - ratio).compute(progress - ratio);
+            if (progress <= ratio) {
+                final var local = progress / ratio;
+                return this.compute(local) * ratio;
+            } else {
+                final var local = (progress - ratio) / (1f - ratio);
+                return ratio + other.compute(local) * (1f - ratio);
+            }
         };
     }
 
-    default EasingFunction mergeOut(EasingFunction other, float ratio)
-    {
+    default EasingFunction mergeOut(EasingFunction other, float ratio) {
         return progress -> {
-            if (progress <= ratio) return ratio * this.scale(ratio).compute(progress);
-            return other.reverse().scale(1f - ratio).compute(progress - ratio);
+            if (progress <= ratio) {
+                final var local = progress / ratio;
+                return this.compute(local);
+            } else {
+                final var local = (progress - ratio) / (1f - ratio);
+                return 1f - other.compute(local);
+            }
         };
     }
 }

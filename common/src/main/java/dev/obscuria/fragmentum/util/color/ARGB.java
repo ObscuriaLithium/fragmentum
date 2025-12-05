@@ -19,12 +19,11 @@ public record ARGB(
     public static final Codec<ARGB> NORMALIZED_CODEC = Codec.FLOAT.listOf().xmap(Colors::argbOf, ARGB::normalized);
     public static final Codec<ARGB> CODEC = CodecExtension.withAlternative(DECIMAL_CODEC, HEXADECIMAL_CODEC, NORMALIZED_CODEC);
 
-    public int decimal()
-    {
-        final var a = Math.min(255, Math.max(0, (int) (alpha * 255)));
-        final var r = Math.min(255, Math.max(0, (int) (red * 255)));
-        final var g = Math.min(255, Math.max(0, (int) (green * 255)));
-        final var b = Math.min(255, Math.max(0, (int) (blue * 255)));
+    public int decimal() {
+        final var a = Mth.clamp(Math.round(alpha * 255), 0, 255);
+        final var r = Mth.clamp(Math.round(red   * 255), 0, 255);
+        final var g = Mth.clamp(Math.round(green * 255), 0, 255);
+        final var b = Mth.clamp(Math.round(blue  * 255), 0, 255);
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 

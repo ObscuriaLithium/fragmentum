@@ -1,2 +1,0 @@
-- Fixed Fragmentum Layer initializing too late, which caused issues with other mods.
-- Updated the license from ARR to [Obscuria-Limited](https://obscurialithium.github.io/license/).
