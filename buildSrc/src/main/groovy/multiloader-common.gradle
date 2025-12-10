@@ -140,7 +140,7 @@ processResources {
 
 publishing {
     publications {
-        create("apiPublication", MavenPublication) {
+        create("api", MavenPublication) {
             groupId = "dev.obscuria"
             artifactId = "fragmentum-${project.name}"
             version = "${minecraft_version}-${version}"
@@ -167,6 +167,7 @@ publishing {
 }
 
 tasks.register("publishAll") {
-    dependsOn("publishPluginMavenPublicationToObscuriaMavenRepository")
-    dependsOn("publishPluginMavenPublicationToGitHubPackagesRepository")
+    group("publishing")
+    dependsOn("publishApiPublicationToObscuriaMavenRepository")
+    dependsOn("publishApiPublicationToGitHubPackagesRepository")
 }
