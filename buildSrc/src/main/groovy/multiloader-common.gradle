@@ -65,7 +65,7 @@ dependencies {
     annotationProcessor("org.checkerframework:checker:3.43.0")
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
-
+    // Lua
     api('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
     api('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
 }
@@ -128,7 +128,8 @@ processResources {
             'modrinth'                     : modrinth,
             'sources'                      : sources,
             'issues'                       : issues,
-            'discord'                      : discord
+            'discord'                      : discord,
+            'update_lookup'                : update_lookup
     ]
 
     filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
@@ -139,14 +140,33 @@ processResources {
 
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
+        create("apiPublication", MavenPublication) {
+            groupId = "dev.obscuria"
+            artifactId = "fragmentum-${project.name}"
+            version = "${minecraft_version}-${version}"
+
+            artifact(tasks.named("jar").get()) {
+                classifier = null
+            }
         }
     }
     repositories {
         maven {
-            url System.getenv('local_maven_url')
+            name = "ObscuriaMaven"
+            url = uri("/Users/obscuria/Modding/maven")
+        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ObscuriaLithium/modding")
+            credentials {
+                username = project.findProperty("github.actor")
+                password = project.findProperty("github.token")
+            }
         }
     }
+}
+
+tasks.register("publishAll") {
+    dependsOn("publishPluginMavenPublicationToObscuriaMavenRepository")
+    dependsOn("publishPluginMavenPublicationToGitHubPackagesRepository")
 }

@@ -3,6 +3,15 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+dependencies {
+    // Mixins
+    compileOnly('org.spongepowered:mixin:0.8.5')
+    compileOnly('io.github.llamalad7:mixinextras-common:0.3.5')
+    annotationProcessor('io.github.llamalad7:mixinextras-common:0.3.5')
+    // Configs
+    api("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${config_version}")
+}
+
 neoForge {
     neoFormVersion = neo_form_version
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -13,17 +22,6 @@ neoForge {
         minecraftVersion = parchment_minecraft
         mappingsVersion = parchment_version
     }
-}
-
-dependencies {
-
-    // Mixins
-    compileOnly('org.spongepowered:mixin:0.8.5')
-    compileOnly('io.github.llamalad7:mixinextras-common:0.3.5')
-    annotationProcessor('io.github.llamalad7:mixinextras-common:0.3.5')
-
-    // Configs
-    api("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${config_version}")
 }
 
 configurations {
@@ -40,5 +38,13 @@ configurations {
 artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}
+
+tasks.withType(PublishToMavenRepository).configureEach {
+    enabled = false
+}
+
+tasks.withType(PublishToMavenLocal).configureEach {
+    enabled = false
 }
 

@@ -15,12 +15,12 @@ public interface BuiltInPackRegistry {
     Multimap<String, Registration> CLIENT_REGISTRATIONS = HashMultimap.create();
     Multimap<String, Registration> SERVER_REGISTRATIONS = HashMultimap.create();
 
-    static void registerResourcePack(String modId, String directory, Component displayName, PackSelectionConfig config, PackSource source) {
-        CLIENT_REGISTRATIONS.put(modId, new Registration(directory, displayName, config, source));
+    static void registerResourcePack(Class<?> modClass, String modId, String directory, Component displayName, PackSelectionConfig config, PackSource source) {
+        CLIENT_REGISTRATIONS.put(modId, new Registration(modClass, directory, displayName, config, source));
     }
 
-    static void registerDataPack(String modId, String directory, Component displayName, PackSelectionConfig config, PackSource source) {
-        SERVER_REGISTRATIONS.put(modId, new Registration(directory, displayName, config, source));
+    static void registerDataPack(Class<?> modClass, String modId, String directory, Component displayName, PackSelectionConfig config, PackSource source) {
+        SERVER_REGISTRATIONS.put(modId, new Registration(modClass, directory, displayName, config, source));
     }
 
     static void forEachRegistration(PackType type, BiConsumer<String, Registration> consumer) {
@@ -31,5 +31,5 @@ public interface BuiltInPackRegistry {
         }
     }
 
-    record Registration(String directory, Component displayName, PackSelectionConfig config, PackSource source) {}
+    record Registration(Class<?> modClass, String directory, Component displayName, PackSelectionConfig config, PackSource source) {}
 }

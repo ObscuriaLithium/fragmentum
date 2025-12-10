@@ -1,0 +1,1 @@
+- Changed the way embedded pack resources are loaded to fix critical errors.

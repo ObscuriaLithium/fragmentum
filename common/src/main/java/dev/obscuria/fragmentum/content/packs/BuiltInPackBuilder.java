@@ -43,11 +43,15 @@ public final class BuiltInPackBuilder {
         return this;
     }
 
-    public void register(String modId) {
+    public void register(Class<?> modClass, String modId) {
         if (type == PackType.CLIENT_RESOURCES) {
-            BuiltInPackRegistry.registerResourcePack(modId, directory, displayName, config, source);
+            BuiltInPackRegistry.registerResourcePack(modClass, modId, directory, displayName, config, source);
         } else {
-            BuiltInPackRegistry.registerDataPack(modId, directory, displayName, config, source);
+            BuiltInPackRegistry.registerDataPack(modClass, modId, directory, displayName, config, source);
         }
+    }
+
+    public void register(String modId) {
+        throw new UnsupportedOperationException("Fragmentum API was changed to fix critical issues. Please update dependent mods.");
     }
 }

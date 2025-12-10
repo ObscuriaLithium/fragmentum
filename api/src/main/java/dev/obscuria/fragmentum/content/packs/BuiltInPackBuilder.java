@@ -30,7 +30,7 @@ public final class BuiltInPackBuilder {
         throw new NotImplementedException();
     }
 
-    public void register(String modId) {
+    public void register(Class<?> modClass, String modId) {
         throw new NotImplementedException();
     }
 }

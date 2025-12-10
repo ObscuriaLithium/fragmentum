@@ -11,9 +11,7 @@ import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraft.world.flag.FeatureFlagSet;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -61,10 +59,15 @@ public final class FragmentumLayer {
             return this::getDefaultIcon;
         }
 
-        private InputStream getDefaultIcon() throws IOException {
-            final var iconPath = Fragmentum.SERVICES.fragmentumIcon();
-            if (iconPath.isEmpty()) throw new IllegalStateException("Fragmentum icon not found");
-            return Files.newInputStream(iconPath.get());
+        private InputStream getDefaultIcon() {
+            try {
+                final @Nullable var resource = Fragmentum.class.getResourceAsStream("/fragmentum.png");
+                if (resource == null) throw new IllegalStateException("Resource `fragmentum.png` not found");
+                return resource;
+            } catch (Exception exception) {
+                Fragmentum.LOGGER.error("Failed to load Fragmentum icon", exception);
+                return InputStream.nullInputStream();
+            }
         }
     }
 
