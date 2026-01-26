@@ -89,7 +89,7 @@ public record ForgeRegistrar(String modId) implements Registrar
     public <T> DelegatedRegistry<T> createRegistry(ResourceKey<Registry<T>> registryKey)
     {
         final var registry = new ForgeDelegatedRegistry<>(registryKey);
-        ForgeFragmentum.addListener(modId, (final NewRegistryEvent event) -> event.create(RegistryBuilder.of(registryKey.location()), registry::bind));
+        ForgeFragmentum.addListener(modId, (final NewRegistryEvent event) -> event.create(new RegistryBuilder<T>().setName(registryKey.location()), registry::bind));
         return registry;
     }
 
