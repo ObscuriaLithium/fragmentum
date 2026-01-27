@@ -1,1 +1,1 @@
-- Changed the way embedded pack resources are loaded to fix critical errors.
+- Fixed an attempt to load a client-side mixin on a dedicated server

@@ -1,4 +1,4 @@
-package dev.obscuria.fragmentum.mixin;
+package dev.obscuria.fragmentum.mixin.client;
 
 import dev.obscuria.fragmentum.content.packs.BuiltInRepositorySource;
 import dev.obscuria.fragmentum.content.packs.FragmentumLayer;

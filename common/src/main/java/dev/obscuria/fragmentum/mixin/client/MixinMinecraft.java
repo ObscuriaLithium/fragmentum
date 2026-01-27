@@ -1,4 +1,4 @@
-package dev.obscuria.fragmentum.mixin;
+package dev.obscuria.fragmentum.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.obscuria.fragmentum.content.packs.BuiltInRepositorySource;
