@@ -34,9 +34,9 @@ public record BuiltInRepositorySource(PackType type) implements RepositorySource
 
     public Optional<Path> resolveRootPath(Class<?> modClass, String modId, String directory) {
         try {
-            final @Nullable var resource = modClass.getResource("/" + directory);
-            if (resource == null) throw new FileNotFoundException("Resource not found: " + directory);
-            final var uri = resource.toURI();
+            final @Nullable var mcmeta = modClass.getResource("/" + directory + "/pack.mcmeta");
+            if (mcmeta == null) throw new FileNotFoundException("Resource not found: " + directory);
+            final var uri = mcmeta.toURI();
             final var scheme = uri.getScheme();
 
             if (scheme.equals("jar")) {
@@ -45,7 +45,7 @@ public record BuiltInRepositorySource(PackType type) implements RepositorySource
             }
 
             if (scheme.equals("file") || scheme.equals("union")) {
-                return Optional.of(Paths.get(uri));
+                return Optional.of(Paths.get(uri).getParent());
             }
 
             throw new IllegalStateException("Unsupported URI scheme: " + scheme);
