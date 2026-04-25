@@ -27,7 +27,7 @@ public interface PayloadCodec<T> {
 
     record RegistryFriendly<T>(Codec<T> codec, Supplier<RegistryAccess> registryAccess) implements PayloadCodec<T> {
 
-        private static final int MAX_LENGTH = 1048576;
+        private static final int MAX_LENGTH = Integer.MAX_VALUE;
         private static final Gson GSON = new Gson();
 
         @Override

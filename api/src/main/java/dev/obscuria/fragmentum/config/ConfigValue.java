@@ -7,6 +7,10 @@ public final class ConfigValue<T> {
 
     private ConfigValue() {}
 
+    public String name() {
+        throw new NotImplementedException();
+    }
+
     public T get() {
         throw new NotImplementedException();
     }

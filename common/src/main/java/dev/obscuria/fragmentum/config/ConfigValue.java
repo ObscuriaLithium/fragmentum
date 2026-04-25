@@ -3,7 +3,7 @@ package dev.obscuria.fragmentum.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 @SuppressWarnings("all")
-public record ConfigValue<T>(ForgeConfigSpec.ConfigValue<T> value) {
+public record ConfigValue<T>(String name, ForgeConfigSpec.ConfigValue<T> value) {
 
     public T get() {
         return value.get();

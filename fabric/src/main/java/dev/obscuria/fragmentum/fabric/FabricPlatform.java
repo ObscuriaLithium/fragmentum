@@ -4,35 +4,37 @@ import dev.obscuria.fragmentum.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
-public class FabricPlatform implements Platform
-{
+import java.nio.file.Path;
+
+public class FabricPlatform implements Platform {
+
     @Override
-    public String getEnvironmentName()
-    {
+    public Path getConfigDir() {
+        return FabricLoader.getInstance().getConfigDir();
+    }
+
+    @Override
+    public String getEnvironmentName() {
         return "Fabric";
     }
 
     @Override
-    public boolean isModLoaded(String modId)
-    {
+    public boolean isModLoaded(String modId) {
         return FabricLoader.getInstance().isModLoaded(modId);
     }
 
     @Override
-    public boolean isClient()
-    {
+    public boolean isClient() {
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
     }
 
     @Override
-    public boolean isDedicatedServer()
-    {
+    public boolean isDedicatedServer() {
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER;
     }
 
     @Override
-    public boolean isDevelopmentEnvironment()
-    {
+    public boolean isDevelopmentEnvironment() {
         return FabricLoader.getInstance().isDevelopmentEnvironment();
     }
 }
