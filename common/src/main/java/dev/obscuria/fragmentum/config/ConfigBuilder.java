@@ -43,27 +43,27 @@ public final class ConfigBuilder {
     }
 
     public <T> ConfigValue<T> define(String path, T defaultValue) {
-        return new ConfigValue<>(specBuilder.define(path, defaultValue));
+        return new ConfigValue<>(path, specBuilder.define(path, defaultValue));
     }
 
     public ConfigValue<Boolean> defineBoolean(String path, boolean defaultValue) {
-        return new ConfigValue<>(specBuilder.define(path, defaultValue));
+        return new ConfigValue<>(path, specBuilder.define(path, defaultValue));
     }
 
     public ConfigValue<Integer> defineInt(String path, int defaultValue, int min, int max) {
-        return new ConfigValue<>(specBuilder.defineInRange(path, defaultValue, min, max));
+        return new ConfigValue<>(path, specBuilder.defineInRange(path, defaultValue, min, max));
     }
 
     public ConfigValue<Double> defineDouble(String path, double defaultValue, double min, double max) {
-        return new ConfigValue<>(specBuilder.defineInRange(path, defaultValue, min, max));
+        return new ConfigValue<>(path, specBuilder.defineInRange(path, defaultValue, min, max));
     }
 
     public ConfigValue<String> defineString(String path, String defaultValue) {
-        return new ConfigValue<>(specBuilder.define(path, defaultValue));
+        return new ConfigValue<>(path, specBuilder.define(path, defaultValue));
     }
 
     public <T extends Enum<T>> ConfigValue<T> DefineEnum(String path, T defaultValue) {
-        return new ConfigValue<>(specBuilder.defineEnum(path, defaultValue));
+        return new ConfigValue<>(path, specBuilder.defineEnum(path, defaultValue));
     }
 
     public <T> ConfigValue<List<? extends T>> defineList(String path, List<T> defaultValue, Supplier<T> newElementSupplier) {
@@ -71,7 +71,7 @@ public final class ConfigBuilder {
     }
 
     public <T> ConfigValue<List<? extends T>> defineList(String path, List<T> defaultValue, Supplier<T> newElementSupplier, Predicate<Object> predicate) {
-        return new ConfigValue<>(specBuilder.defineListAllowEmpty(path, defaultValue, newElementSupplier, predicate));
+        return new ConfigValue<>(path, specBuilder.defineListAllowEmpty(path, defaultValue, newElementSupplier, predicate));
     }
 
     public void buildClient(String modId) {

@@ -3,31 +3,29 @@ package dev.obscuria.fragmentum.neoforge;
 import dev.obscuria.fragmentum.Fragmentum;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.javafmlmod.FMLModContainer;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 @Mod(Fragmentum.MODID)
-public class NeoFragmentum {
+public final class NeoFragmentum {
 
     public NeoFragmentum(IEventBus eventBus) {
         Fragmentum.init();
     }
 
     public static <T extends Event> void addListener(String modId, Consumer<T> listener) {
-        final var container = ModList.get().getModContainerById(modId).orElseThrow();
-        if (!(container instanceof FMLModContainer mod)) return;
-        assert mod.getEventBus() != null;
-        mod.getEventBus().addListener(listener);
+        @Nullable var eventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
+        if (eventBus == null) throw new IllegalStateException("Invalid mod loading context:");
+        eventBus.addListener(listener);
     }
 
     public static void register(String modId, DeferredRegister<?> register) {
-        final var container = ModList.get().getModContainerById(modId).orElseThrow();
-        if (!(container instanceof FMLModContainer mod)) return;
-        assert mod.getEventBus() != null;
-        register.register(mod.getEventBus());
+        @Nullable var eventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
+        if (eventBus == null) throw new IllegalStateException("Invalid mod loading context:");
+        register.register(eventBus);
     }
 }

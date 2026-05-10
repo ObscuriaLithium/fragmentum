@@ -3,7 +3,7 @@ package dev.obscuria.fragmentum.config;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 @SuppressWarnings("all")
-public record ConfigValue<T>(ModConfigSpec.ConfigValue<T> value) {
+public record ConfigValue<T>(String name, ModConfigSpec.ConfigValue<T> value) {
 
     public T get() {
         return value.get();

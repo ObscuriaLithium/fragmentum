@@ -4,12 +4,20 @@ import dev.obscuria.fragmentum.Platform;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLPaths;
+
+import java.nio.file.Path;
 
 public final class NeoPlatform implements Platform {
 
     @Override
+    public Path getConfigDir() {
+        return FMLPaths.CONFIGDIR.get();
+    }
+
+    @Override
     public String getEnvironmentName() {
-        return "Forge";
+        return "NeoForge";
     }
 
     @Override
