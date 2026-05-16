@@ -1,0 +1,13 @@
+dependencies {
+    // Dependencies
+    modImplementation("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_version}")
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl_version}+${minecraft_version}-fabric")
+    // Integrations
+    modImplementation("com.terraformersmc:modmenu:${fabric_modmenu_version}")
+    // Includes
+    include("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_version}")
+    include("dev.isxander:yet-another-config-lib:${yacl_version}+${minecraft_version}-fabric")
+    include("com.github.FiguraMC.luaj:luaj-core:3.0.8-figura")
+    include("com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura")
+    // include("org.luaj:luaj-jse:3.0.1")
+}

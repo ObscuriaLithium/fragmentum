@@ -10,19 +10,13 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
-    // Fabric
+    // Dependencies
     modImplementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
-    modImplementation("com.terraformersmc:modmenu:${fabric_modmenu_version}")
-    // Configs
-    modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_version}")
-    // Lua Interpreter
-    // include("org.luaj:luaj-jse:3.0.1")
-    include('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
-    include('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
-    // Common
     implementation project(":common")
 }
+
+apply from: 'dependencies.gradle'
 
 loom {
     if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {

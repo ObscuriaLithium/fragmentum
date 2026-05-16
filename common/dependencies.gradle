@@ -1,0 +1,6 @@
+dependencies {
+    // Dependencies
+    implementation("fuzs.forgeconfigapiport:forgeconfigapiport-common:${config_version}")
+    implementation('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
+    implementation('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
+}

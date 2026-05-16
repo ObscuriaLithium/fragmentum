@@ -49,13 +49,11 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0"))
-    // Lua Interpreter
-    // jarJar("org.luaj:luaj-jse:3.0.1")
-    jarJar('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
-    jarJar('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
-    // Common
+    // Dependencies
     compileOnly project(":common")
 }
+
+apply from: 'dependencies.gradle'
 
 jar {
     finalizedBy('reobfJar')

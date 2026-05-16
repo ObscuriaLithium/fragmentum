@@ -1,0 +1,7 @@
+dependencies {
+    // jarJar
+    jarJar("dev.isxander:yet-another-config-lib:${yacl_version}+${minecraft_version}-forge")
+    jarJar("com.github.FiguraMC.luaj:luaj-core:3.0.8-figura")
+    jarJar("com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura")
+    // jarJar("org.luaj:luaj-jse:3.0.1")
+}

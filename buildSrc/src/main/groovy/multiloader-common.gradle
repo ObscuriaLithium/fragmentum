@@ -40,18 +40,34 @@ repositories {
         filter { includeGroup('org.parchmentmc.data') }
     }
     maven {
-        name = 'BlameJared'
-        url = 'https://maven.blamejared.com'
+        name = "ObscuriaLocal"
+        url = uri("/Users/obscuria/Modding/maven")
     }
     maven {
-        name = "Terraformers MC"
-        url = 'https://maven.terraformersmc.com/releases/'
+        name = "Obscuria"
+        url = "https://raw.githubusercontent.com/ObscuriaLithium/modding/main/maven/"
     }
     maven {
+        name = "CurseMaven"
+        url = "https://cursemaven.com"
+    }
+    maven {
+        // Yet Another Config Lib
+        name = 'Xander Maven'
+        url = 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        // Forge Config API Port
         name = "Fuzs Mod Resources"
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
     }
     maven {
+        // Mod Menu
+        name = "TerraformersMC"
+        url = 'https://maven.terraformersmc.com/releases/'
+    }
+    maven {
+        // LuaJ
         url 'https://jitpack.io'
         content {
             includeGroup "com.github.FiguraMC.luaj"
