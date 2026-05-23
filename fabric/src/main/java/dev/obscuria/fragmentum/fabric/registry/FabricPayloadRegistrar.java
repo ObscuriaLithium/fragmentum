@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.fabric.registry;
 
 import dev.obscuria.fragmentum.Fragmentum;
-import dev.obscuria.fragmentum.content.network.PayloadRegistrar;
+import dev.obscuria.fragmentum.v2.api.common.network.PayloadRegistrar;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -26,9 +26,9 @@ public record FabricPayloadRegistrar(String modId) implements PayloadRegistrar {
             Class<T> clazz,
             CustomPacketPayload.Type<T> type,
             StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec,
-            BiConsumer<Player, T> handler) {
-
-        PayloadTypeRegistry.playS2C().register(type, streamCodec);
+            BiConsumer<Player, T> handler
+    ) {
+        PayloadTypeRegistry.clientboundPlay().register(type, streamCodec);
         if (Fragmentum.PLATFORM.isDedicatedServer()) return;
         ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
             FabricNetworking.clientReplySender = context.responseSender();
@@ -42,9 +42,9 @@ public record FabricPayloadRegistrar(String modId) implements PayloadRegistrar {
             Class<T> clazz,
             CustomPacketPayload.Type<T> type,
             StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec,
-            BiConsumer<ServerPlayer, T> handler) {
-
-        PayloadTypeRegistry.playC2S().register(type, streamCodec);
+            BiConsumer<ServerPlayer, T> handler
+    ) {
+        PayloadTypeRegistry.serverboundPlay().register(type, streamCodec);
         ServerPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
             FabricNetworking.serverReplySender = context.responseSender();
             handler.accept(context.player(), payload);

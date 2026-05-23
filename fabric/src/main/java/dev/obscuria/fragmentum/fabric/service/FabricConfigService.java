@@ -1,42 +1,25 @@
 package dev.obscuria.fragmentum.fabric.service;
 
-import dev.obscuria.fragmentum.Fragmentum;
-import dev.obscuria.fragmentum.config.ConfigBuilder;
 import dev.obscuria.fragmentum.service.ConfigService;
 import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
-import fuzs.forgeconfigapiport.fabric.api.v5.client.ConfigScreenFactoryRegistry;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class FabricConfigService implements ConfigService {
 
-    public static final FabricConfigService INSTANCE = new FabricConfigService();
+    public static final FabricConfigService SHARED = new FabricConfigService();
+
+    @Override public void registerClient(String modId, String fileName, ModConfigSpec.Builder builder) {
+        ConfigRegistry.INSTANCE.register(modId, ModConfig.Type.CLIENT, builder.build(), fileName);
+    }
+
+    @Override public void registerCommon(String modId, String fileName, ModConfigSpec.Builder builder) {
+        ConfigRegistry.INSTANCE.register(modId, ModConfig.Type.COMMON, builder.build(), fileName);
+    }
+
+    @Override public void registerServer(String modId, String fileName, ModConfigSpec.Builder builder) {
+        ConfigRegistry.INSTANCE.register(modId, ModConfig.Type.SERVER, builder.build(), fileName);
+    }
 
     private FabricConfigService() {}
-
-    @Override
-    public void registerClient(String modId, ConfigBuilder builder) {
-        registerInternal(modId, builder, ModConfig.Type.CLIENT);
-    }
-
-    @Override
-    public void registerCommon(String modId, ConfigBuilder builder) {
-        registerInternal(modId, builder, ModConfig.Type.COMMON);
-    }
-
-    @Override
-    public void registerServer(String modId, ConfigBuilder builder) {
-        registerInternal(modId, builder, ModConfig.Type.SERVER);
-    }
-
-    private void registerInternal(String modId, ConfigBuilder builder, ModConfig.Type type) {
-        final var spec = builder.specBuilder.build();
-        if (builder.fileName == null) {
-            ConfigRegistry.INSTANCE.register(modId, type, spec);
-        } else {
-            ConfigRegistry.INSTANCE.register(modId, type, spec, builder.fileName);
-        }
-        if (Fragmentum.PLATFORM.isDedicatedServer()) return;
-        ConfigScreenFactoryRegistry.INSTANCE.register(modId, ConfigurationScreen::new);
-    }
 }

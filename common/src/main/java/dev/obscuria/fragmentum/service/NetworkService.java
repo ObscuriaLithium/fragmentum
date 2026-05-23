@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.service;
 
-import dev.obscuria.fragmentum.content.network.PayloadRegistrar;
+import dev.obscuria.fragmentum.v2.api.common.network.PayloadRegistrar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Entity;
 
 public interface NetworkService {
 
-    PayloadRegistrar payloadRegistrar(String modId);
+    PayloadRegistrar registrar(String modId);
 
     <T extends CustomPacketPayload> void reply(T payload);
 

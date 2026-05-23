@@ -3,26 +3,21 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
-dependencies {
-    // Mixins
-    compileOnly("org.spongepowered:mixin:0.8.5")
-    compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
-    annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
-    // Dependencies
-    api("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${config_version}")
-}
-
 neoForge {
     neoFormVersion = neo_form_version
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
 }
+
+dependencies {
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+}
+
+apply from: 'dependencies.gradle'
 
 configurations {
     commonJava {
@@ -41,7 +36,6 @@ artifacts {
 }
 
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-
 ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
     configurations.named("$variant") {
         attributes {
@@ -49,7 +43,6 @@ def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', Strin
         }
     }
 }
-
 sourceSets.configureEach {
     [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
         configurations.named("$variant") {
@@ -58,12 +51,4 @@ sourceSets.configureEach {
             }
         }
     }
-}
-
-tasks.withType(PublishToMavenRepository).configureEach {
-    enabled = false
-}
-
-tasks.withType(PublishToMavenLocal).configureEach {
-    enabled = false
 }

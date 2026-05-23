@@ -1,6 +1,5 @@
 package dev.obscuria.fragmentum;
 
-import dev.obscuria.fragmentum.client.FragmentumClient;
 import dev.obscuria.fragmentum.service.FragmentumServices;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
@@ -8,20 +7,17 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ServiceLoader;
 
-@SuppressWarnings("unused")
-public interface Fragmentum {
+public final class Fragmentum {
 
-    String MODID = "fragmentum";
-    String DISPLAY_NAME = "Fragmentum";
-    Logger LOGGER = LoggerFactory.getLogger(DISPLAY_NAME);
-    Platform PLATFORM = ServiceLoader.load(Platform.class).findFirst().orElseThrow();
-    FragmentumServices SERVICES = ServiceLoader.load(FragmentumServices.class).findFirst().orElseThrow();
+    public static final String MOD_ID = "fragmentum";
+    public static final String MOD_NAME = "FragmentumAPI";
+    public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+    public static final Platform PLATFORM = ServiceLoader.load(Platform.class).findFirst().orElseThrow();
+    public static final FragmentumServices SERVICES = ServiceLoader.load(FragmentumServices.class).findFirst().orElseThrow();
 
-    static Identifier key(String name) {
-        return Identifier.fromNamespaceAndPath(MODID, name);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
-    static void init() {
-        if (PLATFORM.isClient()) FragmentumClient.init();
-    }
+    public static void init() {}
 }

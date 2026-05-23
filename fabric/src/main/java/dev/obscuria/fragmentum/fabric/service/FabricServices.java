@@ -1,10 +1,10 @@
 package dev.obscuria.fragmentum.fabric.service;
 
 import dev.obscuria.fragmentum.fabric.registry.FabricRegistrar;
-import dev.obscuria.fragmentum.content.registry.Registrar;
 import dev.obscuria.fragmentum.service.*;
+import dev.obscuria.fragmentum.v2.api.common.registry.Registrar;
 
-public class FabricServices implements FragmentumServices {
+public final class FabricServices implements FragmentumServices {
 
     @Override
     public Registrar registrar(String modId) {
@@ -13,26 +13,26 @@ public class FabricServices implements FragmentumServices {
 
     @Override
     public FactoryService factory() {
-        return FabricFactoryService.INSTANCE;
+        return FabricFactoryService.SHARED;
     }
 
     @Override
     public NetworkService network() {
-        return FabricNetworkService.INSTANCE;
+        return FabricNetworkService.SHARED;
     }
 
     @Override
     public ServerService server() {
-        return FabricServerService.INSTANCE;
+        return FabricServerService.SHARED;
     }
 
     @Override
     public ClientService client() {
-        return FabricClientService.INSTANCE;
+        return FabricClientService.SHARED;
     }
 
     @Override
     public ConfigService config() {
-        return FabricConfigService.INSTANCE;
+        return FabricConfigService.SHARED;
     }
 }

@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.service;
 
-import dev.obscuria.fragmentum.server.FragmentumServerRegistry;
+import dev.obscuria.fragmentum.v2.api.server.FragmentumServerRegistry;
 
 public interface ServerService {
 

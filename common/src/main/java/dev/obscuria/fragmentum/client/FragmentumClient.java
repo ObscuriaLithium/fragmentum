@@ -1,10 +1,14 @@
 package dev.obscuria.fragmentum.client;
 
-import dev.obscuria.fragmentum.content.world.tooltip.GroupTooltip;
+import dev.obscuria.fragmentum.v2.api.client.ClientTooltipStack;
+import dev.obscuria.fragmentum.v2.api.client.TooltipComponentRegistry;
+import dev.obscuria.fragmentum.v2.api.common.TooltipStack;
+import lombok.experimental.UtilityClass;
 
-public interface FragmentumClient {
+@UtilityClass
+public final class FragmentumClient {
 
-    static void init() {
-        FragmentumClientRegistry.registerTooltipComponent(GroupTooltip.class, ClientGroupTooltip::create);
+    public static void init() {
+        TooltipComponentRegistry.register(TooltipStack.class, ClientTooltipStack::create);
     }
 }

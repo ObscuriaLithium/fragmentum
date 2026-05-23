@@ -15,7 +15,6 @@ java {
 
 repositories {
     mavenCentral()
-    // https://docs.gradle.org/current/userguide/declaring_repositories.html#declaring_content_exclusively_found_in_one_repository
     exclusiveContent {
         forRepository {
             maven {
@@ -25,32 +24,35 @@ repositories {
         }
         filter { includeGroupAndSubgroups('org.spongepowered') }
     }
-    exclusiveContent {
-        forRepositories(
-                maven {
-                    name = 'ParchmentMC'
-                    url = 'https://maven.parchmentmc.org/'
-                },
-                maven {
-                    name = "NeoForge"
-                    url = 'https://maven.neoforged.net/releases'
-                }
-        )
-        filter { includeGroup('org.parchmentmc.data') }
+    maven {
+        name = "ObscuriaLocal"
+        url = uri("/Users/obscuria/Modding/maven")
     }
     maven {
-        name = 'BlameJared'
-        url = 'https://maven.blamejared.com'
-    }
-    maven {
-        name = "Fuzs"
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+        name = "Obscuria"
+        url = "https://raw.githubusercontent.com/ObscuriaLithium/modding/main/maven/"
     }
     maven {
         name = "CurseMaven"
-        url "https://cursemaven.com"
+        url = "https://cursemaven.com"
     }
     maven {
+        // Yet Another Config Lib
+        name = 'Xander Maven'
+        url = 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        // Forge Config API Port
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    maven {
+        // Mod Menu
+        name = "TerraformersMC"
+        url = 'https://maven.terraformersmc.com/releases/'
+    }
+    maven {
+        // LuaJ
         url 'https://jitpack.io'
         content {
             includeGroup "com.github.FiguraMC.luaj"
@@ -63,33 +65,16 @@ dependencies {
     implementation("com.google.code.findbugs:jsr305:3.0.1")
     compileOnly("org.checkerframework:checker-qual:3.43.0")
     annotationProcessor("org.checkerframework:checker:3.43.0")
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
-    // Lua
-    api('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
-    api('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
-}
-
-// Declare capabilities on the outgoing configurations.
-// Read more about capabilities here: https://docs.gradle.org/current/userguide/component_capabilities.html#sec:declaring-additional-capabilities-for-a-local-component
-['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
-    configurations."$variant".outgoing {
-        capability("$group:${project.name}:$version")
-        capability("$group:${base.archivesName.get()}:$version")
-        capability("$group:$mod_id-${project.name}-${minecraft_version}:$version")
-        capability("$group:$mod_id:$version")
-    }
-    publishing.publications.configureEach {
-        suppressPomMetadataWarningsFor(variant)
-    }
+    compileOnly "org.projectlombok:lombok:1.18.40"
+    annotationProcessor "org.projectlombok:lombok:1.18.40"
 }
 
 sourcesJar {
-    from(rootProject.file("LICENSE.md"))
+    from(rootProject.file('LICENSE.md'))
 }
 
 jar {
-    from(rootProject.file("LICENSE.md"))
+    from(rootProject.file('LICENSE.md'))
 
     manifest {
         attributes([
@@ -107,7 +92,7 @@ jar {
 processResources {
     var expandProps = [
             'version'                      : version,
-            'group'                        : project.group, //Else we target the task's group.
+            'group'                        : project.group,
             'minecraft_version'            : minecraft_version,
             'minecraft_version_range'      : minecraft_version_range,
             'fabric_version'               : fabric_version,
@@ -148,34 +133,14 @@ processResources {
 
 publishing {
     publications {
-        create("api", MavenPublication) {
-            groupId = "dev.obscuria"
-            artifactId = "fragmentum-${project.name}"
-            version = "${minecraft_version}-${version}"
-
-            artifact(tasks.named("jar").get()) {
-                classifier = null
-            }
+        register('mavenJava', MavenPublication) {
+            artifactId base.archivesName.get()
+            from components.java
         }
     }
     repositories {
         maven {
-            name = "ObscuriaMaven"
-            url = uri("/Users/obscuria/Modding/maven")
-        }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ObscuriaLithium/modding")
-            credentials {
-                username = project.findProperty("github.actor")
-                password = project.findProperty("github.token")
-            }
+            url System.getenv('local_maven_url')
         }
     }
-}
-
-tasks.register("publishAll") {
-    group("publishing")
-    dependsOn("publishApiPublicationToObscuriaMavenRepository")
-    dependsOn("publishApiPublicationToGitHubPackagesRepository")
 }

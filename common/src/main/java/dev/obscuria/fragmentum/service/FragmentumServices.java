@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.service;
 
-import dev.obscuria.fragmentum.content.registry.Registrar;
+import dev.obscuria.fragmentum.v2.api.common.registry.Registrar;
 
 public interface FragmentumServices {
 
