@@ -66,4 +66,5 @@ modrinth {
 
 hekate {
     metadata = uri(metadata_lookup)
+    minecraftVersions = ['26.1', '26.1.1', '26.1.2']
 }
