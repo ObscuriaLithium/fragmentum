@@ -1,16 +1,16 @@
 package dev.obscuria.fragmentum.v2.api.server;
 
 import com.mojang.brigadier.CommandDispatcher;
+import dev.obscuria.fragmentum.Fragmentum;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import org.apache.commons.lang3.NotImplementedException;
 
 @SuppressWarnings("unused")
 public interface FragmentumServerRegistry {
 
     static void registerCommand(CommandRegistrar registrar) {
-        throw new NotImplementedException();
+        Fragmentum.SERVICES.server().registerCommand(registrar);
     }
 
     @FunctionalInterface

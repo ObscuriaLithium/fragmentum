@@ -133,14 +133,19 @@ processResources {
 
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
+        register("api", MavenPublication) {
+            groupId = "dev.obscuria"
+            artifactId = "fragmentum-${project.name}"
+            version = "${minecraft_version}-${version}"
+            artifact(tasks.jar) {
+                classifier = null
+            }
         }
     }
     repositories {
         maven {
-            url System.getenv('local_maven_url')
+            name = 'ObscuriaMaven'
+            url = uri('/Users/obscuria/Modding/maven')
         }
     }
 }

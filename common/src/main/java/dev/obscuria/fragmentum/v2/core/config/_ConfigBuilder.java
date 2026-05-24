@@ -46,32 +46,32 @@ public final class _ConfigBuilder implements ConfigBuilder {
 
     @Override
     public <T> ConfigValue<T> define(String path, T defaultValue) {
-        return register(new _ConfigValue<>(specBuilder.define(path, defaultValue)));
+        return register(new _ConfigValue<>(path, specBuilder.define(path, defaultValue)));
     }
 
     @Override
     public ConfigValue<Boolean> defineBoolean(String path, boolean defaultValue) {
-        return register(new _ConfigValue<>(specBuilder.define(path, defaultValue)));
+        return register(new _ConfigValue<>(path, specBuilder.define(path, defaultValue)));
     }
 
     @Override
     public ConfigValue<Integer> defineInt(String path, int defaultValue, int min, int max) {
-        return register(new _ConfigValue<>(specBuilder.defineInRange(path, defaultValue, min, max)));
+        return register(new _ConfigValue<>(path, specBuilder.defineInRange(path, defaultValue, min, max)));
     }
 
     @Override
     public ConfigValue<Double> defineDouble(String path, double defaultValue, double min, double max) {
-        return register(new _ConfigValue<>(specBuilder.defineInRange(path, defaultValue, min, max)));
+        return register(new _ConfigValue<>(path, specBuilder.defineInRange(path, defaultValue, min, max)));
     }
 
     @Override
     public ConfigValue<String> defineString(String path, String defaultValue) {
-        return register(new _ConfigValue<>(specBuilder.define(path, defaultValue)));
+        return register(new _ConfigValue<>(path, specBuilder.define(path, defaultValue)));
     }
 
     @Override
     public <T extends Enum<T>> ConfigValue<T> DefineEnum(String path, T defaultValue) {
-        return register(new _ConfigValue<>(specBuilder.defineEnum(path, defaultValue)));
+        return register(new _ConfigValue<>(path, specBuilder.defineEnum(path, defaultValue)));
     }
 
     @Override
@@ -81,7 +81,7 @@ public final class _ConfigBuilder implements ConfigBuilder {
 
     @Override
     public <T> ConfigValue<List<? extends T>> defineList(String path, List<T> defaultValue, Supplier<T> newElementSupplier, Predicate<Object> predicate) {
-        return register(new _ConfigValue<>(specBuilder.defineListAllowEmpty(path, defaultValue, newElementSupplier, predicate)));
+        return register(new _ConfigValue<>(path, specBuilder.defineListAllowEmpty(path, defaultValue, newElementSupplier, predicate)));
     }
 
     @Override

@@ -9,9 +9,8 @@ import net.minecraft.server.packs.repository.RepositorySource;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -41,12 +40,17 @@ public record BuiltInRepositorySource(PackType type) implements RepositorySource
             final var uri = mcmeta.toURI();
             final var scheme = uri.getScheme();
 
-            if (scheme.equals("jar")) {
-                final var fileSystem = FileSystems.getFileSystem(uri);
+            if (scheme.equals("jar") || scheme.equals("union")) {
+                FileSystem fileSystem;
+                try {
+                    fileSystem = FileSystems.getFileSystem(uri);
+                } catch (FileSystemNotFoundException e) {
+                    fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
+                }
                 return Optional.of(fileSystem.getPath("/" + directory));
             }
 
-            if (scheme.equals("file") || scheme.equals("union")) {
+            if (scheme.equals("file")) {
                 return Optional.of(Paths.get(uri).getParent());
             }
 

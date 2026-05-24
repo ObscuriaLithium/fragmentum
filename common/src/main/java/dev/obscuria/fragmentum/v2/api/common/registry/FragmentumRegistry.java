@@ -5,7 +5,7 @@ import dev.obscuria.fragmentum.Fragmentum;
 @SuppressWarnings("unused")
 public final class FragmentumRegistry {
 
-    static Registrar registrar(String modId) {
+    public static Registrar registrar(String modId) {
         return Fragmentum.SERVICES.registrar(modId);
     }
 }
