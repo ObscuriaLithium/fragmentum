@@ -1,10 +1,8 @@
 package dev.obscuria.fragmentum.mixin.client;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.obscuria.fragmentum.common.BuiltInRepositorySource;
 import dev.obscuria.fragmentum.common.FragmentumLayer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.main.GameConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;
 import org.apache.commons.lang3.ArrayUtils;
@@ -16,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class MixinMinecraft {
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/repository/PackRepository;<init>([Lnet/minecraft/server/packs/repository/RepositorySource;)V"))
-    private RepositorySource[] injectFragmentumLayer(RepositorySource[] sources, @Local(argsOnly = true) GameConfig config) {
+    private RepositorySource[] injectFragmentumLayer(RepositorySource[] sources) {
         return ArrayUtils.addAll(sources,
                 new BuiltInRepositorySource(PackType.CLIENT_RESOURCES),
                 FragmentumLayer.Source.create(PackType.CLIENT_RESOURCES));
