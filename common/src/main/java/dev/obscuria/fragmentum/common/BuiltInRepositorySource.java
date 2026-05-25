@@ -6,6 +6,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.RepositorySource;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+@ApiStatus.Internal
 public record BuiltInRepositorySource(PackType type) implements RepositorySource {
 
     @Override

@@ -1,6 +1,7 @@
 package dev.obscuria.fragmentum.common;
 
 import dev.obscuria.fragmentum.Fragmentum;
+import lombok.experimental.UtilityClass;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.*;
 import net.minecraft.server.packs.repository.Pack;
@@ -9,6 +10,7 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraft.world.flag.FeatureFlagSet;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+@UtilityClass
+@ApiStatus.Internal
 public final class FragmentumLayer {
 
     public record Source(Path directory, PackType type) implements RepositorySource {

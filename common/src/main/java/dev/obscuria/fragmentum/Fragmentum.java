@@ -1,12 +1,16 @@
 package dev.obscuria.fragmentum;
 
 import dev.obscuria.fragmentum.service.FragmentumServices;
+import lombok.experimental.UtilityClass;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ServiceLoader;
 
+@UtilityClass
+@ApiStatus.Internal
 public final class Fragmentum {
 
     public static final String MOD_ID = "fragmentum";
