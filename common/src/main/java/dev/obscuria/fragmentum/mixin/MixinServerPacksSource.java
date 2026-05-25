@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.mixin;
 
-import dev.obscuria.fragmentum.common.packs.BuiltInRepositorySource;
-import dev.obscuria.fragmentum.common.packs.FragmentumLayer;
+import dev.obscuria.fragmentum.common.BuiltInRepositorySource;
+import dev.obscuria.fragmentum.common.FragmentumLayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;

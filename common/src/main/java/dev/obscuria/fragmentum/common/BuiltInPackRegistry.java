@@ -1,4 +1,4 @@
-package dev.obscuria.fragmentum.common.packs;
+package dev.obscuria.fragmentum.common;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

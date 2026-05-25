@@ -1,8 +1,8 @@
 package dev.obscuria.fragmentum.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.obscuria.fragmentum.common.packs.BuiltInRepositorySource;
-import dev.obscuria.fragmentum.common.packs.FragmentumLayer;
+import dev.obscuria.fragmentum.common.BuiltInRepositorySource;
+import dev.obscuria.fragmentum.common.FragmentumLayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.server.packs.PackType;

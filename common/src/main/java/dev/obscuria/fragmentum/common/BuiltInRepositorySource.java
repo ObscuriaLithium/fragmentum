@@ -1,4 +1,4 @@
-package dev.obscuria.fragmentum.common.packs;
+package dev.obscuria.fragmentum.common;
 
 import dev.obscuria.fragmentum.Fragmentum;
 import net.minecraft.server.packs.PackLocationInfo;

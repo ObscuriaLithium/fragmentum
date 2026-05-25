@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.mixin.client;
 
-import dev.obscuria.fragmentum.common.packs.BuiltInRepositorySource;
-import dev.obscuria.fragmentum.common.packs.FragmentumLayer;
+import dev.obscuria.fragmentum.common.BuiltInRepositorySource;
+import dev.obscuria.fragmentum.common.FragmentumLayer;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;

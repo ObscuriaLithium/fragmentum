@@ -1,7 +1,7 @@
 package dev.obscuria.fragmentum.v2.core.common.packs;
 
 import dev.obscuria.fragmentum.v2.api.common.packs.BuiltInPackBuilder;
-import dev.obscuria.fragmentum.common.packs.BuiltInPackRegistry;
+import dev.obscuria.fragmentum.common.BuiltInPackRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
