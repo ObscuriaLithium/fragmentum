@@ -1,6 +1,6 @@
 package dev.obscuria.fragmentum.v2.api.common.signal;
 
-import dev.obscuria.fragmentum.common.signal._Signal1;
+import dev.obscuria.fragmentum.v2.core.common.signal._Signal1;
 
 @SuppressWarnings("unused")
 public interface Signal1<P1> extends Signal<Signal1.Listener<P1>> {

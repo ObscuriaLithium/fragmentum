@@ -1,4 +1,4 @@
-package dev.obscuria.fragmentum.common.signal;
+package dev.obscuria.fragmentum.v2.core.common.signal;
 
 import dev.obscuria.fragmentum.v2.api.common.signal.Signal5;
 
