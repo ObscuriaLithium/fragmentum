@@ -4,13 +4,12 @@ plugins {
 }
 
 dependencies {
-    // Mixins
     compileOnly('org.spongepowered:mixin:0.8.5')
     compileOnly('io.github.llamalad7:mixinextras-common:0.3.5')
     annotationProcessor('io.github.llamalad7:mixinextras-common:0.3.5')
-    // Configs
-    api("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${config_version}")
 }
+
+apply from: 'dependencies.gradle'
 
 neoForge {
     neoFormVersion = neo_form_version

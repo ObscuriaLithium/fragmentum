@@ -1,0 +1,3 @@
+dependencies {
+    api("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${config_version}")
+}

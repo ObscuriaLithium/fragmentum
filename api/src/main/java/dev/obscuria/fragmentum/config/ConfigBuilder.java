@@ -2,6 +2,7 @@ package dev.obscuria.fragmentum.config;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -70,6 +71,10 @@ public final class ConfigBuilder {
     }
 
     public void buildServer(String modId) {
+        throw new NotImplementedException();
+    }
+
+    public HashSet<ConfigValue<?>> collectValues() {
         throw new NotImplementedException();
     }
 }

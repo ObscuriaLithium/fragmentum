@@ -39,18 +39,34 @@ repositories {
         filter { includeGroup('org.parchmentmc.data') }
     }
     maven {
-        name = 'BlameJared'
-        url = 'https://maven.blamejared.com'
+        name = "ObscuriaLocal"
+        url = uri("/Users/obscuria/Modding/maven")
     }
     maven {
-        name = "Terraformers MC"
-        url = 'https://maven.terraformersmc.com/releases/'
+        name = "Obscuria"
+        url = "https://raw.githubusercontent.com/ObscuriaLithium/modding/main/maven/"
     }
     maven {
+        name = "CurseMaven"
+        url = "https://cursemaven.com"
+    }
+    maven {
+        // Yet Another Config Lib
+        name = 'Xander Maven'
+        url = 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        // Forge Config API Port
         name = "Fuzs Mod Resources"
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
     }
     maven {
+        // Mod Menu
+        name = "TerraformersMC"
+        url = 'https://maven.terraformersmc.com/releases/'
+    }
+    maven {
+        // LuaJ
         url 'https://jitpack.io'
         content {
             includeGroup "com.github.FiguraMC.luaj"
@@ -65,7 +81,7 @@ dependencies {
     annotationProcessor("org.checkerframework:checker:3.43.0")
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
-    // Lua
+
     api('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
     api('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')
 }
@@ -118,8 +134,6 @@ processResources {
             'description'                  : project.description,
             'neoforge_version'             : neoforge_version,
             'neoforge_loader_version_range': neoforge_loader_version_range,
-            "forge_version"                : forge_version,
-            "forge_loader_version_range"   : forge_loader_version_range,
             'credits'                      : credits,
             'java_version'                 : java_version,
             'config_version'               : config_version,
