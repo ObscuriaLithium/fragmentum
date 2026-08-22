@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @SuppressWarnings("all")
 public final class NeoDelegatedRegistry<T> implements DelegatedRegistry<T> {
@@ -52,6 +53,11 @@ public final class NeoDelegatedRegistry<T> implements DelegatedRegistry<T> {
     @Override
     public Set<Map.Entry<ResourceKey<T>, T>> entrySet() {
         return source.entrySet();
+    }
+
+    @Override
+    public Stream<Holder.Reference<T>> holders() {
+        return source.holders();
     }
 
     @Override

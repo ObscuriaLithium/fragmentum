@@ -3,6 +3,7 @@ package dev.obscuria.fragmentum.content.world.tooltip;
 import dev.obscuria.fragmentum.content.util.color.Colors;
 import dev.obscuria.fragmentum.content.util.color.RGB;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class TooltipTags {
         register("b", new SimpleFlag(StyleFlag.BOLD));
         register("no-i", new SimpleFlag(StyleFlag.NON_ITALIC));
         register("no-b", new SimpleFlag(StyleFlag.NON_BOLD));
+        register("tr", Translate.INSTANCE);
     }
 
     public static void register(String key, Instance instance) {
@@ -123,6 +125,25 @@ public class TooltipTags {
         private void apply(TooltipBuilder builder, RGB first, RGB second, float speed) {
             float seconds = (System.currentTimeMillis() - START_TIME) / 1000f;
             builder.pushColor(first.lerp(second, 0.5f + 0.5f * (float) Math.sin(seconds * speed)));
+        }
+    }
+
+    private enum Translate implements Instance {
+        INSTANCE;
+
+        @Override
+        public void open(TooltipBuilder builder, List<String> args) {
+            var component = Component.translatable(args.getFirst());
+            var length = component.getString().length();
+            if (length == 0) return;
+            builder.prepareForAppend(length);
+            builder.maybeAppendSpacing();
+            builder.append(length, component);
+        }
+
+        @Override
+        public void close(TooltipBuilder builder) {
+
         }
     }
 }

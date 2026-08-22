@@ -3,9 +3,7 @@ package dev.obscuria.fragmentum.content.world.tooltip;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,12 +43,12 @@ public class Tooltips {
 
         final var tagMatcher = TAG_PATTERN.matcher(input);
         while (tagMatcher.find()) {
-            matches.add(new MatchResult(tagMatcher.start(), tagMatcher.end(), tagMatcher));
+            matches.add(new MatchResult(tagMatcher.start(), tagMatcher.end(), tagMatcher, true));
         }
 
         final var templateMatcher = TEMPLATE_PATTERN.matcher(input);
         while (templateMatcher.find()) {
-            matches.add(new MatchResult(templateMatcher.start(), templateMatcher.end(), templateMatcher));
+            matches.add(new MatchResult(templateMatcher.start(), templateMatcher.end(), templateMatcher, false));
         }
 
         matches.sort(Comparator.comparingInt(a -> a.start));
@@ -77,10 +75,10 @@ public class Tooltips {
                 }
             }
 
-            if (match.matcher.group().startsWith("[")) {
-                final var key = match.matcher.group(2);
-                if (!CLOSING_MARKER.equals(match.matcher.group(1))) {
-                    final var rawArgs = match.matcher.group(3) != null ? match.matcher.group(3).split(DELIMITER) : new String[0];
+            if (match.isTag) {
+                final var key = match.groups[2];
+                if (!CLOSING_MARKER.equals(match.groups[1])) {
+                    final var rawArgs = match.groups[3] != null ? match.groups[3].split(DELIMITER) : new String[0];
                     final var args = new ArrayList<String>();
                     for (var arg : rawArgs) if (!arg.isEmpty()) args.add(arg);
                     group.add(new Node.OpeningTag(key, args));
@@ -88,8 +86,8 @@ public class Tooltips {
                     group.add(new Node.ClosingTag(key));
                 }
             } else {
-                final var key = match.matcher.group(1);
-                final var rawArgs = match.matcher.group(2).split(DELIMITER);
+                final var key = match.groups[1];
+                final var rawArgs = match.groups[2].split(DELIMITER);
                 final var args = new ArrayList<String>();
                 for (var arg : rawArgs) if (!arg.isEmpty()) args.add(arg);
                 group.add(new Node.Template(source, key, args));
@@ -119,7 +117,6 @@ public class Tooltips {
     }
 
     private static void flushGroup(List<Node> group, List<Node> nodes) {
-
         if (group.isEmpty()) return;
         if (group.size() == 1) {
             nodes.add(group.remove(0));
@@ -131,14 +128,20 @@ public class Tooltips {
 
     private static class MatchResult {
 
-        int start;
-        int end;
-        Matcher matcher;
+        final int start;
+        final int end;
+        final String[] groups;
+        final boolean isTag;
 
-        MatchResult(int start, int end, Matcher matcher) {
+        MatchResult(int start, int end, Matcher matcher, boolean isTag) {
             this.start = start;
             this.end = end;
-            this.matcher = matcher;
+            this.isTag = isTag;
+            final int count = matcher.groupCount();
+            this.groups = new String[count + 1];
+            for (int i = 0; i <= count; i++) {
+                this.groups[i] = matcher.group(i);
+            }
         }
     }
 

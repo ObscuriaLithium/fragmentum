@@ -13,15 +13,14 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.function.Supplier;
 
@@ -91,6 +90,14 @@ public record FabricRegistrar(String modId) implements Registrar {
     }
 
     @Override
+    public <T> Registry<T> createVanillaRegistry(ResourceKey<Registry<T>> registryKey) {
+        return FabricRegistryBuilder
+                .createSimple(registryKey)
+                .attribute(RegistryAttribute.SYNCED)
+                .buildAndRegister();
+    }
+
+    @Override
     public <T> void createDataRegistry(ResourceKey<Registry<T>> registryKey, Supplier<Codec<T>> codec) {
         DynamicRegistries.register(registryKey, codec.get());
     }
@@ -109,5 +116,16 @@ public record FabricRegistrar(String modId) implements Registrar {
     @SuppressWarnings("DataFlowIssue")
     public void registerAttributes(DeferredEntity<? extends LivingEntity> entity, AttributeSupplier.Builder builder) {
         FabricDefaultAttributeRegistry.register(entity.get(), builder);
+    }
+
+    @Override
+    @SuppressWarnings("DataFlowIssue")
+    public void registerAttributes(DeferredEntity<? extends LivingEntity> entity, Supplier<AttributeSupplier.Builder> builderSupplier) {
+        FabricDefaultAttributeRegistry.register(entity.get(), builderSupplier.get());
+    }
+
+    @Override
+    public <T extends Mob> void registerSpawnPlacement(DeferredEntity<T> deferredEntity, SpawnPlacementType placementType, Heightmap.Types heightmap, SpawnPlacements.SpawnPredicate<T> predicate) {
+        SpawnPlacements.register(deferredEntity.get(), placementType, heightmap, predicate);
     }
 }

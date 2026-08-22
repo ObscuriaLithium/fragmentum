@@ -3,6 +3,8 @@ package dev.obscuria.fragmentum.content.util.easing;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
 
+import java.util.Locale;
+
 @SuppressWarnings("ALL")
 public enum Easing implements EasingFunction, StringRepresentable {
     LINEAR(EasingInternal.linear()),
@@ -67,6 +69,6 @@ public enum Easing implements EasingFunction, StringRepresentable {
 
     @Override
     public String getSerializedName() {
-        return name().toLowerCase();
+        return name().toLowerCase(Locale.ROOT);
     }
 }

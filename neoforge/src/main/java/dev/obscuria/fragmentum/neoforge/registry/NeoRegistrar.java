@@ -11,17 +11,17 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
@@ -78,9 +78,16 @@ public record NeoRegistrar(String modId) implements Registrar {
 
     @Override
     public <T> DelegatedRegistry<T> createRegistry(ResourceKey<Registry<T>> registryKey) {
-        final var registry = new RegistryBuilder<>(registryKey).create();
+        var registry = new RegistryBuilder<>(registryKey).create();
         NeoFragmentum.addListener(modId, (final NewRegistryEvent event) -> event.register(registry));
         return new NeoDelegatedRegistry<>(registry);
+    }
+
+    @Override
+    public <T> Registry<T> createVanillaRegistry(ResourceKey<Registry<T>> registryKey) {
+        var registry = new RegistryBuilder<>(registryKey).create();
+        NeoFragmentum.addListener(modId, (final NewRegistryEvent event) -> event.register(registry));
+        return registry;
     }
 
     @Override
@@ -101,6 +108,18 @@ public record NeoRegistrar(String modId) implements Registrar {
     @Override
     public void registerAttributes(DeferredEntity<? extends LivingEntity> entity, AttributeSupplier.Builder builder) {
         NeoFragmentum.addListener(modId, (final EntityAttributeCreationEvent event) -> event.put(entity.get(), builder.build()));
+    }
+
+    @Override
+    public void registerAttributes(DeferredEntity<? extends LivingEntity> entity, Supplier<AttributeSupplier.Builder> builderSupplier) {
+        NeoFragmentum.addListener(modId, (final EntityAttributeCreationEvent event) -> event.put(entity.get(), builderSupplier.get().build()));
+    }
+
+    @Override
+    public <T extends Mob> void registerSpawnPlacement(DeferredEntity<T> deferredEntity, SpawnPlacementType placementType, Heightmap.Types heightmap, SpawnPlacements.SpawnPredicate<T> predicate) {
+        NeoFragmentum.addListener(modId, (final RegisterSpawnPlacementsEvent event) -> event.register(
+                deferredEntity.get(), placementType, heightmap, predicate,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE));
     }
 
     private <T> Lazy<Holder<T>> registerInternal(ResourceKey<? extends Registry<T>> key, ResourceLocation id, Supplier<? extends T> supplier) {

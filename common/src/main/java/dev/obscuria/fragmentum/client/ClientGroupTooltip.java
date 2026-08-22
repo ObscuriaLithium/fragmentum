@@ -16,14 +16,13 @@ public record ClientGroupTooltip(List<ClientTooltipComponent> components) implem
         return new ClientGroupTooltip(tooltip.components().stream().map(ClientTooltipComponent::create).toList());
     }
 
-    @SuppressWarnings("unchecked")
     public static <T extends ClientTooltipComponent> @Nullable T findFirst(List<ClientTooltipComponent> components, Class<T> type) {
         for (var component : components) {
             if (type.isInstance(component)) {
-                return (T) component;
+                return type.cast(component);
             }
-            if (component instanceof ClientGroupTooltip group) {
-                final @Nullable var result = findFirst(group.components(), type);
+            if (component instanceof ClientGroupTooltip(List<ClientTooltipComponent> inner)) {
+                final @Nullable var result = findFirst(inner, type);
                 if (result != null) return result;
             }
         }
@@ -32,20 +31,20 @@ public record ClientGroupTooltip(List<ClientTooltipComponent> components) implem
 
     @Override
     public int getHeight() {
-        var result = 0;
+        var totalHeight = 0;
         for (var component : components) {
-            result += component.getHeight();
+            totalHeight += component.getHeight();
         }
-        return result;
+        return totalHeight;
     }
 
     @Override
     public int getWidth(Font font) {
-        var result = 0;
+        var maxWidth = 0;
         for (var component : components) {
-            result += component.getWidth(font);
+            maxWidth = Math.max(maxWidth, component.getWidth(font));
         }
-        return result;
+        return maxWidth;
     }
 
     @Override

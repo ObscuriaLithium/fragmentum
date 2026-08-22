@@ -1,5 +1,6 @@
 package dev.obscuria.fragmentum.config;
 
+import com.google.common.base.Predicates;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.HashSet;
@@ -50,7 +51,12 @@ public final class ConfigBuilder {
         throw new NotImplementedException();
     }
 
+    @Deprecated
     public <T extends Enum<T>> ConfigValue<T> DefineEnum(String path, T defaultValue) {
+        throw new NotImplementedException();
+    }
+
+    public <T extends Enum<T>> ConfigValue<T> defineEnum(String path, T defaultValue) {
         throw new NotImplementedException();
     }
 

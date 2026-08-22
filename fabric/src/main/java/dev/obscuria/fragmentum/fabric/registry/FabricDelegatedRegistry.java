@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public record FabricDelegatedRegistry<T>(Registry<T> source) implements DelegatedRegistry<T> {
 
@@ -41,6 +42,11 @@ public record FabricDelegatedRegistry<T>(Registry<T> source) implements Delegate
     @Override
     public Set<Map.Entry<ResourceKey<T>, T>> entrySet() {
         return source.entrySet();
+    }
+
+    @Override
+    public Stream<Holder.Reference<T>> holders() {
+        return source.holders();
     }
 
     @Override

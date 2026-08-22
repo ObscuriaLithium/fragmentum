@@ -7,15 +7,14 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.function.Supplier;
 
@@ -40,7 +39,10 @@ public interface Registrar {
 
     DeferredAttribute registerAttribute(ResourceLocation id, Supplier<Attribute> supplier);
 
+    @Deprecated
     <T> DelegatedRegistry<T> createRegistry(ResourceKey<Registry<T>> registryKey);
+
+    <T> Registry<T> createVanillaRegistry(ResourceKey<Registry<T>> registryKey);
 
     <T> void createDataRegistry(ResourceKey<Registry<T>> registryKey, Supplier<Codec<T>> codec);
 
@@ -48,5 +50,10 @@ public interface Registrar {
 
     <T> void createSyncedDataRegistry(ResourceKey<Registry<T>> registryKey, Supplier<Codec<T>> codec, Supplier<Codec<T>> networkCodec);
 
+    @Deprecated
     void registerAttributes(DeferredEntity<? extends LivingEntity> entity, AttributeSupplier.Builder builder);
+
+    void registerAttributes(DeferredEntity<? extends LivingEntity> entity, Supplier<AttributeSupplier.Builder> builderSupplier);
+
+    <T extends Mob> void registerSpawnPlacement(DeferredEntity<T> deferredEntity, SpawnPlacementType placementType, Heightmap.Types heightmap, SpawnPlacements.SpawnPredicate<T> predicate);
 }

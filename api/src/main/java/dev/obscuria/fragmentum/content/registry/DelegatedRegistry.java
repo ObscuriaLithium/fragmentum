@@ -9,6 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public interface DelegatedRegistry<T> {
@@ -24,6 +25,8 @@ public interface DelegatedRegistry<T> {
     Set<ResourceLocation> keySet();
 
     Set<Map.Entry<ResourceKey<T>, T>> entrySet();
+
+    Stream<Holder.Reference<T>> holders();
 
     boolean containsKey(ResourceLocation key);
 
