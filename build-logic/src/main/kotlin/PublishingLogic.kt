@@ -144,7 +144,7 @@ fun Project.configureModPublishing(ctx: Context) {
 		file.set(jarTask.flatMap(Jar::getArchiveFile))
 		additionalFiles.from(srcJarTask.flatMap(Jar::getArchiveFile))
 		type = releaseType
-		version = ctx.fullVersion
+		version = ctx.basicVersion
 		changelog.set(rootProject.file("CHANGELOG.md").readText())
 		modLoaders.add(ctx.loader.id)
 
