@@ -3,6 +3,7 @@ package dev.obscuria.fragmentum.api.config.screen
 import dev.obscuria.fragmentum.api.config.Configurable
 import dev.obscuria.fragmentum.api.config.format.DoubleFormatter
 import dev.obscuria.fragmentum.config.screen.ConfigScreenFactoryImpl
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
@@ -54,6 +55,12 @@ interface ConfigScreenFactory {
 	fun <T> listOption(
 		configurable: Configurable<List<T>>
 	): OptionBuilder<T, *> where T : Any
+
+	fun buttonOption(
+		text: Component? = null,
+		available: Boolean = true,
+		action: (Screen) -> Unit
+	): OptionBuilder<Unit, *>
 
 	fun checkBoxOption(
 		configurable: Configurable<Boolean>

@@ -9,6 +9,7 @@ import dev.obscuria.fragmentum.api.config.screen.ConfigScreenBuilder
 import dev.obscuria.fragmentum.api.config.screen.ConfigScreenFactory
 import dev.obscuria.fragmentum.api.config.screen.OptionBuilder
 import net.minecraft.ChatFormatting
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -90,6 +91,14 @@ internal class ConfigScreenFactoryImpl(
 		configurable: Configurable<List<T>>
 	): OptionBuilder<T, *> {
 		return ListOptionBuilderImpl(modId, configurable)
+	}
+
+	override fun buttonOption(
+		text: Component?,
+		available: Boolean,
+		action: (Screen) -> Unit
+	): OptionBuilder<Unit, *> {
+		return ButtonOptionBuilderImpl(modId, text, available, action)
 	}
 
 	override fun checkBoxOption(
