@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 object Fragmentum {
 
 	const val MOD_ID: String = /*$ mod_id*/ "fragmentum";
-	const val MOD_VERSION: String = /*$ mod_version*/ "5.0.0";
+	const val MOD_VERSION: String = /*$ mod_version*/ "5.1.1";
 	const val MOD_FRIENDLY_NAME: String = /*$ mod_name*/ "Fragmentum";
 	val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
 

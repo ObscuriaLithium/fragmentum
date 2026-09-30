@@ -87,7 +87,7 @@ internal data class FabricRegistrar(val modId: String) : Registrar {
 	//~ if >1.20.1 'SpawnPlacements.Type' -> 'SpawnPlacementType' {
 	override fun <T : Mob> registerSpawnPlacement(
 		type: Deferred<EntityType<T>>,
-		placementType: SpawnPlacementType,
+		placementType: SpawnPlacements.Type,
 		heightmap: Heightmap.Types,
 		predicate: SpawnPlacements.SpawnPredicate<T>
 	) {

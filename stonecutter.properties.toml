@@ -3,7 +3,7 @@ loomx.loom_version="1.16-SNAPSHOT"
 mod.id = "fragmentum"
 mod.name = "Fragmentum"
 mod.group = "dev.obscuria"
-mod.version = "5.0.0"
+mod.version = "5.1.1"
 mod.channel_tag = ""
 mod.description = "The lightweight framework for the Obscuria Collection multi-loader mods."
 mod.authors = ["Obscuria"]
@@ -57,11 +57,11 @@ publish.additionalVersions = ["26.1.1", "26.1.2"]
 
 [forge]
 deps.kotlinforforge = "4.11.0"
-deps.yacl = "3.6.6+1.20.1-forge"
 
 [forge."1.20.1"]
 deps.minecraft = "1.20.1"
 deps.forge = "47.2.0"
+deps.yacl = "3.6.6+1.20.1-forge"
 
 [neoforge]
 deps.kotlinforforge = "5.3.0"
