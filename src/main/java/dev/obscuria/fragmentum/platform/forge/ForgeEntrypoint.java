@@ -2,8 +2,10 @@ package dev.obscuria.fragmentum.platform.forge;
 
 //? forge {
 import dev.obscuria.fragmentum.Fragmentum;
-import net.minecraftforge.api.distmarker.Dist;import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.DistExecutor;import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 
