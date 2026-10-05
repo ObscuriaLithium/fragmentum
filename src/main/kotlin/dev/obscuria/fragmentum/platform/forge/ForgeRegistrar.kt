@@ -2,10 +2,14 @@ package dev.obscuria.fragmentum.platform.forge
 
 //? forge {
 import com.mojang.serialization.Codec
+import com.mojang.serialization.Lifecycle
 import dev.obscuria.fragmentum.api.registry.Deferred
 import dev.obscuria.fragmentum.api.registry.Registrar
+import dev.obscuria.fragmentum.mixin.BuiltInRegistriesAccessor
 import net.minecraft.core.Holder
+import net.minecraft.core.MappedRegistry
 import net.minecraft.core.Registry
+import net.minecraft.core.WritableRegistry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
@@ -18,8 +22,6 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent
 import net.minecraftforge.registries.DataPackRegistryEvent
 import net.minecraftforge.registries.DeferredRegister
-import net.minecraftforge.registries.NewRegistryEvent
-import net.minecraftforge.registries.RegistryBuilder
 import org.jetbrains.annotations.ApiStatus
 
 @ApiStatus.Internal
@@ -45,12 +47,18 @@ internal data class ForgeRegistrar(val modId: String) : Registrar {
 		return Deferred.create { registryObject.getHolder().orElseThrow() as Holder<T> }
 	}
 
+	@Suppress("UNCHECKED_CAST", "DEPRECATION")
 	override fun <T> createRegistry(
 		registryKey: ResourceKey<Registry<T>>
 	): Registry<T> where T : Any {
-		val registry = ForgeRegistryWrapper(registryKey)
-		ForgeEntrypoint.addListener<NewRegistryEvent>(modId) {
-			it.create(RegistryBuilder<T>().setName(registryKey.location()), registry::bind)
+		val registry = MappedRegistry(registryKey, Lifecycle.stable(), false)
+		val root = BuiltInRegistriesAccessor.`fragmentum$getWritableRegistry`() as WritableRegistry<Registry<*>>
+
+		(root as MappedRegistry<*>).unfreeze()
+		try {
+			root.register(registryKey as ResourceKey<Registry<*>>, registry, Lifecycle.stable())
+		} finally {
+			(root as MappedRegistry<*>).freeze()
 		}
 		return registry
 	}
