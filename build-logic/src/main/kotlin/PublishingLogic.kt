@@ -179,6 +179,7 @@ private fun ModPublishExtension.modrinth(
 
 	this.accessToken = accessToken
 	minecraftVersions.addAll(listOf(ctx.currentMcVersion) + additionalVersions)
+	changelog.set(latestChangelogEntry(changelog.get()))
 
 	if (!staging) {
 		val platform = this
@@ -215,4 +216,15 @@ private fun ModPublishExtension.curseforge(
 
 private fun whenNotNull(stringProp: Property<String>, action: (String) -> Unit) {
 	if (!stringProp.orNull.isNullOrBlank()) action(stringProp.get())
+}
+
+private fun latestChangelogEntry(full: String): String {
+	val lines = full.lines()
+	val start = lines.indexOfFirst { it.startsWith("## ") }
+	if (start < 0) return full.trim()
+
+	val nextOffset = lines.drop(start + 1).indexOfFirst { it.startsWith("## ") }
+	val end = if (nextOffset < 0) lines.size else start + 1 + nextOffset
+
+	return lines.subList(start, end).joinToString("\n").trim()
 }
