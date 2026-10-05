@@ -80,6 +80,7 @@ dependencies {
 	annotationProcessor("org.spongepowered:mixin:${libs.versions.mixin.get()}:processor")
 	modInclude("thedarkcolour:kotlinforforge:${prop("deps.kotlinforforge")}")
 	modInclude("dev.isxander:yet-another-config-lib:${prop("deps.yacl")}")
+	jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")
 }
 
 sourceSets {
