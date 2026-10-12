@@ -1,3 +1,9 @@
+## [5.3.0] - 2026-10-12
+
+* Added the `AssetRegistry` API with support for resource reloading
+* Added support for `stringFieldOption` in `ConfigScreenFactory`
+* Extended `Deferred` with `Lazy` and optimized `DeferredImpl` initialization
+
 ## [5.2.0] - 2026-10-05
 
 * `ForgeRegistrar.createRegistry` now creates vanilla mapped registries instead of Forge-specific registries
