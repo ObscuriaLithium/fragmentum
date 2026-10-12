@@ -22,9 +22,6 @@ platform {
 		required("neoforge") {
 			forgeLikeVersionRange.set("[1,)")
 		}
-//		required("kotlinforforge") {
-//			forgeLikeVersionRange.set("[${prop("deps.kotlinforforge")},)")
-//		}
 	}
 }
 
