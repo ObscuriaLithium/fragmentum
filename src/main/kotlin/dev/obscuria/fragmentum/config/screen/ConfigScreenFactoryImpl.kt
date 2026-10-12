@@ -131,6 +131,14 @@ internal class ConfigScreenFactoryImpl(
 		}
 	}
 
+	override fun stringFieldOption(
+		configurable: Configurable<String>
+	): OptionBuilder<String, *> {
+		return option(configurable).controller {
+			StringControllerBuilder.create(it)
+		}
+	}
+
 	override fun intSliderOption(
 		configurable: Configurable<Int>,
 		step: Int,

@@ -78,6 +78,10 @@ interface ConfigScreenFactory {
 		max: Double
 	): OptionBuilder<Double, *>
 
+	fun stringFieldOption(
+		configurable: Configurable<String>
+	): OptionBuilder<String, *>
+
 	fun intSliderOption(
 		configurable: Configurable<Int>,
 		step: Int,
