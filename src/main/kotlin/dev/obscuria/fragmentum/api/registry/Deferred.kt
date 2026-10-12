@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Supplier
 
-interface Deferred<T> : Supplier<T> {
+interface Deferred<T> : Supplier<T>, Lazy<T> {
 
 	fun isBound(): Boolean
 
