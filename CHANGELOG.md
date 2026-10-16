@@ -1,3 +1,7 @@
+## [5.4.0] - 2026-10-15
+
+* Added a **Lite** version under **Additional Files** without bundled dependencies, ideal for modpack creators who prefer to manage Fragmentum dependencies manually or already include them in their modpack
+
 ## [5.3.0] - 2026-10-12
 
 * Added the `AssetRegistry` API with support for resource reloading
