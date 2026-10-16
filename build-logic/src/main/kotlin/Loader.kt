@@ -5,25 +5,26 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment
-import org.gradle.api.NamedDomainObjectContainer
 import java.util.*
 
 sealed class Loader(val id: String) {
 	abstract val modManifestPath: String
 	abstract val excludedResources: List<String>
+	abstract val nestedLibrariesPath: String
 
 	open val isFabricLike: Boolean = false
 
-	abstract fun generateManifest(ctx: Context): String
+	abstract fun generateManifest(ctx: Context, includeBundled: Boolean): String
 
 	object Fabric : Loader("fabric") {
 		override val isFabricLike = true
 		override val modManifestPath = "fabric.mod.json"
+		override val nestedLibrariesPath = "META-INF/jars/"
 		override val excludedResources = listOf(
 			"META-INF/mods.toml", "META-INF/neoforge.mods.toml", "aw/*.cfg", ".cache", "pack.mcmeta"
 		)
 
-		override fun generateManifest(ctx: Context): String {
+		override fun generateManifest(ctx: Context, includeBundled: Boolean): String {
 			val manifest = FabricManifest(
 				id = ctx.modId,
 				name = ctx.modName,
@@ -61,7 +62,7 @@ sealed class Loader(val id: String) {
 					"fabric-datagen" to listOf("${ctx.modGroup}.${ctx.modId}.platform.fabric.datagen.FabricDataGeneratorEntrypoint")
 				),
 				mixins = listOf("${ctx.modId}.mixins.json"),
-				depends = ctx.extension.dependencies.required.associate { it.modid.get() to it.fabricLikeVersionRange.get() },
+				depends = ctx.extension.dependencies.requiredFor(includeBundled).associate { it.modid.get() to it.fabricLikeVersionRange.get() },
 				recommends = ctx.extension.dependencies.optional.associate { it.modid.get() to it.fabricLikeVersionRange.get() },
 				breaks = ctx.extension.dependencies.incompatible.associate { it.modid.get() to it.fabricLikeVersionRange.get() },
 				provides = ctx.extension.dependencies.embeds.map { it.modid.get() }
@@ -75,13 +76,15 @@ sealed class Loader(val id: String) {
 			"fabric.mod.json", "aw/*.accesswidener", ".cache"
 		)
 
+		override val nestedLibrariesPath = "META-INF/jarjar/"
+
 		//open val modLoaderId: String = "kotlinforforge"
 		open val modLoaderId: String = "javafml"
 
-		override fun generateManifest(ctx: Context): String {
+		override fun generateManifest(ctx: Context, includeBundled: Boolean): String {
 			val forgeDeps = mutableListOf<ForgeDependency>()
 
-			fun addDeps(container: NamedDomainObjectContainer<Dependency>, type: String) {
+			fun addDeps(container: Iterable<Dependency>, type: String) {
 				container.forEach {
 					forgeDeps.add(
 						ForgeDependency(
@@ -95,7 +98,7 @@ sealed class Loader(val id: String) {
 				}
 			}
 
-			addDeps(ctx.extension.dependencies.required, "required")
+			addDeps(ctx.extension.dependencies.requiredFor(includeBundled), "required")
 			addDeps(ctx.extension.dependencies.optional, "optional")
 			addDeps(ctx.extension.dependencies.incompatible, "incompatible")
 

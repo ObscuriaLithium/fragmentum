@@ -22,6 +22,12 @@ platform {
 		required("forge") {
 			forgeLikeVersionRange.set("[1,)")
 		}
+		bundled("kotlinforforge") {
+			forgeLikeVersionRange = "[${versionProp("deps.kotlinforforge")},)"
+		}
+		bundled("yet_another_config_lib_v3") {
+			forgeLikeVersionRange = "[${versionProp("deps.yacl")},)"
+		}
 	}
 }
 

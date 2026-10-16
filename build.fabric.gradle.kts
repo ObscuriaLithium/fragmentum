@@ -29,10 +29,16 @@ platform {
 		required("fabricloader") {
 			fabricLikeVersionRange = ">=${prop("deps.fabric-loader")}"
 		}
-		required("fabric-language-kotlin") {
-			fabricLikeVersionRange = ">=${prop("deps.fabric-language-kotlin")}"
-		}
 		optional("modmenu") {}
+		bundled("fabric-language-kotlin") {
+			fabricLikeVersionRange = ">=${versionProp("deps.fabric-language-kotlin")}"
+		}
+		bundled("forgeconfigapiport") {
+			fabricLikeVersionRange = ">=${versionProp("deps.forge-config-api-port")}"
+		}
+		bundled("yet_another_config_lib_v3") {
+			fabricLikeVersionRange = ">=${versionProp("deps.yacl")}"
+		}
 	}
 }
 

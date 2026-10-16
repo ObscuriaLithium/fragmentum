@@ -83,6 +83,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		configureKotlinRuntime(ctx)
 		registerGenerateManifestTask(ctx)
 		configureJarTask(ctx)
+		registerLiteJarTask(ctx)
 		configureIdea()
 		configureProcessResources(ctx)
 		applyVersionedResources(ctx, versionedResourceMappings)
@@ -130,7 +131,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		}
 
 		val generateTask = tasks.register<GenerateModManifestTask>("generateModManifest") {
-			content.set(ctx.loader.generateManifest(ctx))
+			content.set(providers.provider { ctx.loader.generateManifest(ctx, includeBundled = false) })
 			outputFile.set(layout.buildDirectory.file("generated/modManifest/${ctx.loader.modManifestPath}"))
 		}
 
@@ -194,6 +195,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		tasks.register<Copy>("buildAndCollect") {
 			from(
 				tasks.named(ctx.extension.jarTask.get()),
+				tasks.named("liteJar"),
 				tasks.named(ctx.extension.sourcesJarTask.get()),
 				tasks.named("javadocJar")
 			)

@@ -24,6 +24,8 @@ fun Project.env(variable: String): String? {
 	}
 }
 
+fun Project.versionProp(name: String): String = prop(name).substringBefore('+')
+
 fun Project.envTrue(variable: String): Boolean = env(variable)?.toDefaultLowerCase() == "true"
 
 fun releaseTypeFromChannelTag(channelTag: String): ReleaseType =
